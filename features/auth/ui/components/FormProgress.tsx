@@ -10,7 +10,11 @@ const FormProgress = ({ currentStep, totalSteps }: Props) => {
         <div
           key={i}
           className={`h-2 flex-1 rounded-full transition-all ${
-            i <= currentStep ? "bg-brand-500" : "bg-gray-200"
+            i === currentStep
+              ? "bg-brand-300"
+              : i <= currentStep
+                ? "bg-brand-500"
+                : "bg-brand-50"
           }`}
         />
       ))}

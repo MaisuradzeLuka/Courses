@@ -14,7 +14,7 @@ const SignUpPassword = ({ control }: Props) => {
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
 
   return (
-    <div>
+    <>
       <Controller
         name="password"
         control={control}
@@ -86,7 +86,7 @@ const SignUpPassword = ({ control }: Props) => {
           </Field>
         )}
       />
-    </div>
+    </>
   );
 };
 

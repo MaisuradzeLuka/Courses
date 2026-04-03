@@ -23,10 +23,7 @@ export const signUpSchema = z
     username: z
       .string()
       .min(3, { message: "Username must be at least 3 characters" }),
-    avatar: z
-      .string()
-      .url({ message: "Avatar must be a valid URL" })
-      .optional(),
+    avatar: z.string().optional(),
   })
   .superRefine((data, ctx) => {
     if (data.password !== data.confirmPassword) {

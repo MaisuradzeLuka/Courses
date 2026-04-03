@@ -50,6 +50,14 @@ export function signUpAction() {
           body: formData,
         },
       );
+
+      const data = await res.json();
+
+      if (!res.ok) {
+        throw new Error(data.message || "Sign in failed");
+      }
+
+      return data;
     },
   });
 

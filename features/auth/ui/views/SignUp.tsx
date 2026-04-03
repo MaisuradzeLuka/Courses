@@ -19,12 +19,21 @@ import { SignUpData, signUpSchema } from "@/lib/validations";
 import { TfiAngleLeft } from "react-icons/tfi";
 import FormProgress from "../components/FormProgress";
 import { signUpAction } from "../../api";
+import { useState } from "react";
+import Redirect from "../components/Redirect";
+import { useRouter } from "next/navigation";
+import { useAuthModal } from "@/hooks/useAuthModal";
 
 const SignUp = () => {
+  const router = useRouter();
   const mutation = signUpAction();
+  const { signUpOpen, closeSignUp, switchToSignIn, setShowSignUp } =
+    useAuthModal();
+
+  const [formError, setFormError] = useState("");
 
   const form = useForm<SignUpData>({
-    // resolver: zodResolver(signUpSchema),
+    resolver: zodResolver(signUpSchema),
     defaultValues: {
       email: "",
       password: "",
@@ -41,15 +50,24 @@ const SignUp = () => {
       <SignUpUsername control={form.control} />,
     ]);
 
-  const handleSubmit = (values: SignUpData) => {
-    console.log(values);
+  const handleSubmit = async (values: SignUpData) => {
+    try {
+      const { data } = await mutation.mutateAsync(values);
 
-    mutation.mutate(values);
+      closeSignUp();
+
+      localStorage.setItem("token", data.token);
+      localStorage.setItem("user", JSON.stringify(data.user));
+
+      router.push("/");
+    } catch (error: any) {
+      setFormError(error.message);
+    }
   };
 
   return (
-    <Dialog>
-      <DialogTrigger className="border-2 rounded-lg py-3 px-4 border-brand-500 bg-brand-500 text-gray-50 font-semibold text-xl cursor-pointer">
+    <Dialog open={signUpOpen} onOpenChange={setShowSignUp}>
+      <DialogTrigger className="border-2 rounded-lg py-4 px-6 border-brand-500 bg-brand-500 text-gray-50 font-semibold text-xl cursor-pointer">
         Sign Up
       </DialogTrigger>
 
@@ -72,14 +90,29 @@ const SignUp = () => {
         <form onSubmit={form.handleSubmit(handleSubmit)}>
           {step}
 
-          <Button
-            type={isLastStep ? "submit" : "button"}
-            className="w-full py-5 bg-brand-500 rounded-lg text-white mt-4 text-[16px] font-medium cursor-pointer"
-            //  disabled={mutation.isPending}
-            onClick={next}
-          >
-            {isLastStep ? "Sign Up" : "Next"}
-          </Button>
+          {formError && (
+            <p className="text-error text-sm mt-2 text-center">{formError}</p>
+          )}
+
+          {isLastStep && (
+            <Button
+              type="submit"
+              className="w-full py-5 bg-brand-500 rounded-lg text-white mt-4 text-[16px] font-medium cursor-pointer disabled:bg-brand-300 disabled:cursor-none"
+              disabled={mutation.isPending}
+            >
+              Sign Up
+            </Button>
+          )}
+
+          {!isLastStep && (
+            <Button
+              type="button"
+              className="w-full py-5 bg-brand-500 rounded-lg text-white mt-4 text-[16px] font-medium cursor-pointer"
+              onClick={next}
+            >
+              Next
+            </Button>
+          )}
         </form>
 
         {!isFirstStep && (
@@ -90,6 +123,8 @@ const SignUp = () => {
             <TfiAngleLeft className="text-gray-400 text-lg" />
           </button>
         )}
+
+        <Redirect variant="signUp" redirectFunction={switchToSignIn} />
       </DialogContent>
     </Dialog>
   );

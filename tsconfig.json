@@ -19,8 +19,11 @@
       }
     ],
     "paths": {
-      "@/*": ["./*"]
-    }
+      "@/*": ["./*"],
+      "@/hooks/useAuthModal": ["./hooks/useAuthModal.tsx"]
+    },
+    "resolvePackageJsonExports": true,
+    "resolvePackageJsonImports": true
   },
   "include": [
     "next-env.d.ts",
