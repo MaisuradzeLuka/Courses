@@ -17,7 +17,7 @@ const Authorized = ({ token }: { token: string }) => {
           <p className="text-[18px] text-gray-700">Pick up where you left</p>
         </div>
 
-        <Link href="#">See All</Link>
+        <Link href="browse-courses">See All</Link>
       </div>
 
       <div className="grid grid-cols-3 gap-6">

@@ -23,7 +23,9 @@ const Navbar = () => {
         </Link>
 
         <div className="flex items-center gap-9">
-          <button className="body-l text-gray-600">Browse Courses</button>
+          <Link href="browse-courses" className="body-l text-gray-600">
+            Browse Courses
+          </Link>
           {!token && (
             <div className="flex items-center gap-2">
               <SignIn />
