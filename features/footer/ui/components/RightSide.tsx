@@ -10,11 +10,12 @@ const RightSide = () => {
 
           <ul className="flex flex-col gap-2.5">
             {navLink.links.map((link) => (
-              <li className="flex items-center gap-1 body-m font-normal! text-gray-500">
+              <li
+                key={link.id}
+                className="flex items-center gap-1 body-m font-normal! text-gray-500"
+              >
                 {link.icon && <link.icon />}
-                <Link href={link.link} key={link.id}>
-                  {link.label}
-                </Link>
+                <Link href={link.link}>{link.label}</Link>
               </li>
             ))}
           </ul>

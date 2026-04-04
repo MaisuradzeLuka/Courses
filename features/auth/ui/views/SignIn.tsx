@@ -23,7 +23,7 @@ import { useRouter } from "next/navigation";
 import Redirect from "../components/Redirect";
 import { useAuthModal } from "@/hooks/useAuthModal";
 
-const SignIn = () => {
+const SignIn = ({ styles }: { styles?: string }) => {
   const router = useRouter();
   const mutation = signInAction();
   const { signInOpen, closeSignIn, switchToSignUp, setShowSignIn } =
@@ -58,7 +58,9 @@ const SignIn = () => {
 
   return (
     <Dialog open={signInOpen} onOpenChange={setShowSignIn}>
-      <DialogTrigger className="border-2 rounded-lg py-4 px-6 border-brand-300 text-brand-500 font-semibold text-xl cursor-pointer">
+      <DialogTrigger
+        className={`border-2 rounded-lg py-4 px-6 border-brand-300 text-brand-500 font-semibold text-xl cursor-pointer  ${styles}`}
+      >
         Log In
       </DialogTrigger>
 

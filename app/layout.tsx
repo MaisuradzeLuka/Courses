@@ -33,7 +33,7 @@ export default function RootLayout({
       <body className="min-h-full flex flex-col justify-between bg-gray-100">
         <Providers>
           <Navbar />
-          {children}
+          <main className="max-w-400 w-full mx-auto">{children}</main>
           <Footer />
         </Providers>
       </body>
