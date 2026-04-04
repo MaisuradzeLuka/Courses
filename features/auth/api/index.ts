@@ -1,9 +1,11 @@
-import { SignUpData } from "@/lib/validations";
+import { SignInData, SignUpData } from "@/lib/validations";
+import { AuthType } from "@/types";
 import { useMutation } from "@tanstack/react-query";
+import Error from "next/error";
 
 export function signInAction() {
-  const mutation = useMutation({
-    mutationFn: async (values: { email: string; password: string }) => {
+  const mutation = useMutation<AuthType, Error, SignInData>({
+    mutationFn: async (values: SignInData) => {
       const res = await fetch(
         `${process.env.NEXT_PUBLIC_REQUEST_API_URL!}/login`,
         {
@@ -29,7 +31,7 @@ export function signInAction() {
 }
 
 export function signUpAction() {
-  const mutation = useMutation({
+  const mutation = useMutation<AuthType, Error, SignUpData>({
     mutationFn: async (values: SignUpData) => {
       const formData = new FormData();
       formData.append("username", values.username);

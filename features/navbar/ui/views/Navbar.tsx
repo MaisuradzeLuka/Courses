@@ -2,12 +2,18 @@
 
 import SignIn from "@/features/auth/ui/views/SignIn";
 import SignUp from "@/features/auth/ui/views/SignUp";
-import Image from "next/image";
+import UserProfile from "@/features/userProfile/ui/views/UserProfile";
 import Link from "next/link";
 import { LuRocket, LuBookOpen } from "react-icons/lu";
+import { useEffect, useState } from "react";
 
 const Navbar = () => {
-  const user = JSON.parse(localStorage.getItem("user") || "");
+  const [token, setToken] = useState<string>("");
+
+  useEffect(() => {
+    const storedToken = localStorage.getItem("token") || "";
+    setToken(storedToken);
+  }, []);
 
   return (
     <div className="py-6 border-b border-gray-200">
@@ -18,14 +24,14 @@ const Navbar = () => {
 
         <div className="flex items-center gap-9">
           <button className="body-l text-gray-600">Browse Courses</button>
-          {!user && (
+          {!token && (
             <div className="flex items-center gap-2">
               <SignIn />
               <SignUp />
             </div>
           )}
 
-          {user && (
+          {token && (
             <div className="flex items-center gap-9">
               <Link
                 href="/"
@@ -34,22 +40,7 @@ const Navbar = () => {
                 <LuBookOpen className="mt-1" /> <span>Enrolled Courses</span>
               </Link>
 
-              <div className="relative bg-brand-50 rounded-full p-2">
-                <Image
-                  src={user.avatar || "/User.png"}
-                  width={38}
-                  height={38}
-                  alt="user avatar"
-                />
-
-                <Image
-                  src="/ping.png"
-                  width={15}
-                  height={15}
-                  alt="avatar ping"
-                  className="absolute bottom-0 right-0"
-                />
-              </div>
+              <UserProfile />
             </div>
           )}
         </div>
