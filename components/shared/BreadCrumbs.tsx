@@ -20,7 +20,7 @@ const BreadCrumbs = () => {
   });
 
   return (
-    <nav className="flex items-center text-sm text-gray-500 body-m">
+    <nav className="flex items-center text-sm text-gray-500 body-m mb-8 my-16">
       <Link href="/" className="hover:text-gray-900">
         Home
       </Link>

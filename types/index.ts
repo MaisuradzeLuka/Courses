@@ -40,3 +40,16 @@ export type CourseType = {
     avatar: string;
   };
 };
+
+export type CourseCatalogMetaType = {
+  currentPage: number;
+  lastPage: number;
+  perPage: number;
+  total: number;
+};
+
+export type CategoryType = {
+  id: number;
+  name: string;
+  icon?: string;
+};
