@@ -26,6 +26,7 @@ const FilterLayout = ({
     const params = new URLSearchParams(window.location.search);
 
     params.delete(paramKey);
+    params.delete("page");
     params.delete("topics[]");
 
     items.forEach((item) => {

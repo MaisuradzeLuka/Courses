@@ -23,7 +23,7 @@ const Navbar = () => {
         </Link>
 
         <div className="flex items-center gap-9">
-          <Link href="browse-courses" className="body-l text-gray-600">
+          <Link href="/browse" className="body-l text-gray-600">
             Browse Courses
           </Link>
           {!token && (

@@ -41,6 +41,71 @@ export type CourseType = {
   };
 };
 
+export type EnrollmentType = {
+  id: number;
+  progress: number;
+  completedAt: string | null;
+
+  schedule: {
+    location: string | null;
+
+    sessionType: {
+      id: number;
+      name: string;
+      priceModifier: string;
+    };
+
+    timeSlot: {
+      id: number;
+      label: string;
+    };
+
+    weeklySchedule: {
+      id: number;
+      label: string;
+    };
+  };
+
+  totalPrice: string;
+};
+
+export type SingleCourseType = {
+  data: {
+    id: number;
+    title: string;
+    description: string;
+    image: string;
+    basePrice: string;
+
+    durationWeeks: number;
+    isFeatured: boolean;
+    isRated: boolean;
+
+    enrollment: EnrollmentType | null;
+
+    category: {
+      id: number;
+      name: string;
+    };
+
+    topic: {
+      id: number;
+      name: string;
+    };
+
+    instructor: {
+      id: number;
+      name: string;
+      avatar: string;
+    };
+
+    reviews: {
+      userId: number;
+      rating: number;
+    }[];
+  };
+};
+
 export type CourseCatalogMetaType = {
   currentPage: number;
   lastPage: number;

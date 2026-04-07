@@ -63,7 +63,7 @@ const CourseCard = ({
           </div>
 
           <Link
-            href={`/courses/${id}`}
+            href={`/browse/${id}`}
             className="bg-brand-500 py-4 px-6 rounded-lg text-gray-50 font-medium"
           >
             Details

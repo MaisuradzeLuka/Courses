@@ -44,7 +44,7 @@ const CourseCatalog = () => {
 
       <CoursePagination
         {...meta}
-        onPageChange={(page) => router.push(`/browse-courses?page=${page}`)}
+        onPageChange={(page) => router.push(`/browse?page=${page}`)}
       />
     </section>
   );

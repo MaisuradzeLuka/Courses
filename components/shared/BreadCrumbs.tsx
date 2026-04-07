@@ -26,7 +26,7 @@ const BreadCrumbs = () => {
       </Link>
 
       {breadCrumbs.slice(1).map((crumb, index) => (
-        <span key={crumb.href} className="flex items-center">
+        <span key={index} className="flex items-center">
           <span className="mx-2">
             <TfiAngleRight />
           </span>
