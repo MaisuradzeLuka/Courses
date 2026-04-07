@@ -33,7 +33,6 @@ const UploadImage = ({
     setFileName(file.name);
 
     try {
-      // Create preview
       const reader = new FileReader();
       reader.onload = () => {
         const result = reader.result;
@@ -43,7 +42,6 @@ const UploadImage = ({
       };
       reader.readAsDataURL(file);
 
-      // Pass the File object directly
       onUpload(file);
     } catch (error) {
       console.error("Error reading file:", error);

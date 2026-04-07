@@ -1,6 +1,5 @@
 import { Dispatch, SetStateAction } from "react";
 import { getCourseCategories } from "../../api";
-import CategoryCard from "@/components/shared/CategoryCard";
 import { CategoryType } from "@/types";
 import FilterLayout from "./FilterLayout";
 
@@ -18,6 +17,7 @@ const Categories = ({ filterItems, setFilterItems }: Props) => {
   return (
     <>
       <FilterLayout
+        paramKey="categories[]"
         title="Categroies"
         filterItems={categories.data}
         selectedFilterItems={filterItems}

@@ -45,7 +45,12 @@ const CourseCard = ({
 
         <h3 className="heading-3 mt-1 mb-4">{title}</h3>
 
-        <CategoryCard id={category.id} label={category.name} variant="dark" />
+        <CategoryCard
+          active={false}
+          id={category.id}
+          label={category.name}
+          variant="dark"
+        />
 
         <div className="flex justify-between mt-4">
           <div className="flex flex-col">

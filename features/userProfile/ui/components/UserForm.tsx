@@ -167,7 +167,6 @@ const UserForm = ({ email, fullname, age, avatar, mobile }: Props) => {
       <Button
         type="submit"
         className="w-full py-6 bg-brand-500 rounded-lg text-white mt-4 text-[16px] font-medium cursor-pointer disabled:bg-brand-300"
-        //   disabled={mutation.isPending}
       >
         Update Profile
       </Button>

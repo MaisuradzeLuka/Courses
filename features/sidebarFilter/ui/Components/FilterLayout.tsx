@@ -1,9 +1,12 @@
 import CategoryCard from "@/components/shared/CategoryCard";
+import { CategoryIconKey } from "@/constants/category";
+import { findExistingItem } from "@/lib/utils";
 import { CategoryType } from "@/types";
 import { useRouter } from "next/navigation";
 import { Dispatch, SetStateAction } from "react";
 
 type Props = {
+  paramKey: string;
   title: string;
   filterItems: CategoryType[];
   selectedFilterItems: CategoryType[];
@@ -11,6 +14,7 @@ type Props = {
 };
 
 const FilterLayout = ({
+  paramKey,
   title,
   filterItems,
   selectedFilterItems,
@@ -18,25 +22,21 @@ const FilterLayout = ({
 }: Props) => {
   const router = useRouter();
 
-  const findExistingItem = (id: number) => {
-    return selectedFilterItems.some((item) => item.id === id);
-  };
-
   const addSearchParams = (items: CategoryType[]) => {
-    const searchParams = new URLSearchParams(window.location.search);
+    const params = new URLSearchParams(window.location.search);
 
-    searchParams.delete("category[]");
+    params.delete(paramKey);
+    params.delete("topics[]");
 
-    const ids = items.map((item) => item.id).join("");
+    items.forEach((item) => {
+      params.append(paramKey, item.id.toString());
+    });
 
-    searchParams.append("category[]", ids.toString());
-
-    const newPath = `${window.location.pathname}?${searchParams.toString()}`;
-    router.push(newPath, { scroll: false });
+    router.push(`?${params.toString()}`, { scroll: false });
   };
 
   const handleClick = (id: number, label: string) => {
-    const existingItem = findExistingItem(id);
+    const existingItem = findExistingItem(id, selectedFilterItems);
 
     let newSelectedItems;
 
@@ -66,10 +66,12 @@ const FilterLayout = ({
                 onClick={() => handleClick(item.id, item.name)}
               />
               <CategoryCard
+                avatar={item.avatar}
+                icon={item.icon as CategoryIconKey}
                 id={item.id}
                 label={item.name}
                 variant="light"
-                active={findExistingItem(item.id)}
+                active={findExistingItem(item.id, selectedFilterItems)}
               />
             </label>
           </li>
