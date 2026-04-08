@@ -40,3 +40,15 @@ export function getPageRange(
 
   return pages;
 }
+
+export function isDisabledSlot({
+  uiId,
+  dataIds,
+}: {
+  uiId: number;
+  dataIds: number[];
+}) {
+  const isDisabled = !dataIds.includes(uiId);
+
+  return isDisabled;
+}

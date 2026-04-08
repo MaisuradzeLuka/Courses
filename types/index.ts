@@ -119,3 +119,25 @@ export type CategoryType = {
   icon?: string;
   avatar?: string;
 };
+
+export type WeekType = {
+  id: number;
+  label: string;
+  days: string[];
+};
+
+export type TimeType = {
+  id: number;
+  label: string;
+  startTime: string;
+  endTime: string;
+};
+
+export type SessionType = {
+  id: number;
+  courseScheduleId: number;
+  name: string;
+  priceModifier: string;
+  availableSeats: number;
+  location: string | null;
+};
