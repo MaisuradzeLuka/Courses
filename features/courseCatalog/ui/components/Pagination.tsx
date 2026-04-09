@@ -9,16 +9,10 @@ import {
 } from "@/components/ui/pagination";
 import { getPageRange } from "@/lib/utils";
 import { CourseCatalogMetaType } from "@/types";
+import { useRouter } from "next/navigation";
 
-type CoursePaginationProps = CourseCatalogMetaType & {
-  onPageChange: (page: number) => void;
-};
-
-const CoursePagination = ({
-  currentPage,
-  lastPage,
-  onPageChange,
-}: CoursePaginationProps) => {
+const CoursePagination = ({ currentPage, lastPage }: CourseCatalogMetaType) => {
+  const router = useRouter();
   if (lastPage <= 1) return null;
 
   const pages = getPageRange(currentPage, lastPage);
@@ -28,7 +22,16 @@ const CoursePagination = ({
 
   const handlePage = (page: number) => {
     if (page < 1 || page > lastPage || page === currentPage) return;
-    onPageChange(page);
+
+    const searchParams = new URLSearchParams(window.location.search);
+
+    searchParams.delete("page");
+
+    searchParams.append("page", page.toString());
+
+    const newPath = `${window.location.pathname}?${searchParams.toString()}`;
+
+    router.push(newPath);
   };
 
   return (
@@ -55,7 +58,11 @@ const CoursePagination = ({
             <PaginationItem key={page}>
               <PaginationLink
                 href="#"
-                className="bg-gray-50 w-10 h-10 border-gray-200 rounded-sm text-[16px] font-medium"
+                className={` w-10 h-10  rounded-sm text-[16px] font-medium ${
+                  page === currentPage
+                    ? "bg-brand-600 text-gray-50"
+                    : "bg-gray-50 border-gray-200"
+                }`}
                 isActive={page === currentPage}
                 onClick={(e) => {
                   e.preventDefault();

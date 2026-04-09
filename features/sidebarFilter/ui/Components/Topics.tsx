@@ -1,7 +1,7 @@
 import { CategoryType } from "@/types";
 import { Dispatch, SetStateAction } from "react";
 import FilterLayout from "./FilterLayout";
-import { getCourseTopics } from "../../api";
+import { useGetCourseTopics } from "../../api";
 import { useSearchParams } from "next/navigation";
 
 type Props = {
@@ -13,7 +13,7 @@ const Topics = ({ filterItems, setFilterItems }: Props) => {
   const searchParams = useSearchParams();
 
   const categories = searchParams.getAll("categories[]");
-  const { data: topics, isLoading, isError } = getCourseTopics(categories);
+  const { data: topics, isLoading, isError } = useGetCourseTopics(categories);
 
   if (isLoading) return <div>Loading...</div>;
   if (isError || !topics) return <div>Error</div>;
@@ -23,7 +23,7 @@ const Topics = ({ filterItems, setFilterItems }: Props) => {
       <FilterLayout
         paramKey="topics[]"
         title="Topics"
-        filterItems={topics.data}
+        filterItems={topics}
         selectedFilterItems={filterItems}
         setSelectedFilterItems={setFilterItems}
       />

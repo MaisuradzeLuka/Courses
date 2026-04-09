@@ -6,6 +6,7 @@ import { Field, FieldLabel } from "@/components/ui/field";
 import { Progress } from "@/components/ui/progress";
 import { Button } from "@/components/ui/button";
 import { CompleteCourse, RetakeCourse } from "@/features/coursesInProgress/api";
+import RateComponent from "./RateComponent";
 
 const EnrolledData = ({ schedule, progress, id }: EnrollmentType) => {
   const deleteEnrollement = RetakeCourse();
@@ -58,7 +59,7 @@ const EnrolledData = ({ schedule, progress, id }: EnrollmentType) => {
         )}
       </div>
 
-      <Field className="w-full max-w-sm">
+      <Field className="max-w-full">
         <FieldLabel
           htmlFor="progress-upload"
           className="flex flex-row-reverse justify-start w-max! text-xs heading-4 text-gray-500 mt-12"
@@ -75,6 +76,8 @@ const EnrolledData = ({ schedule, progress, id }: EnrollmentType) => {
       >
         {isCompleted ? "Retake Course" : "Complete Course"}
       </Button>
+
+      {isCompleted && <RateComponent />}
     </section>
   );
 };

@@ -10,6 +10,8 @@ const Description = ({ data }: SingleCourseType) => {
       : data.reviews.reduce((sum, review) => sum + review.rating, 0) /
         data.reviews.length;
 
+  const roundedRating = Math.round(avgRating * 10) / 10;
+
   return (
     <section className="col-span-5">
       <Image
@@ -30,7 +32,7 @@ const Description = ({ data }: SingleCourseType) => {
         <div className="flex items-center gap-2">
           <div className="flex items-center gap-1 text-[16px]">
             <FaStar className="text-warning" />
-            <span className="text-gray-600">{avgRating || 0}</span>
+            <span className="text-gray-600">{roundedRating || 0}</span>
           </div>
 
           <CategoryCard

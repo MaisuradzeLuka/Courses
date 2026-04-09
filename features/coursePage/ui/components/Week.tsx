@@ -2,7 +2,7 @@ import { weeksData } from "@/constants/EnrollementSlots";
 import { Dispatch, SetStateAction } from "react";
 import SlotCard from "./SlotCard";
 import { isDisabledSlot } from "@/lib/utils";
-import { getWeeks } from "../../api";
+import { useGetWeeks } from "../../api";
 
 type Props = {
   postId: number;
@@ -11,7 +11,7 @@ type Props = {
 };
 
 const Week = ({ postId, selectedWeek, setSelectedWeek }: Props) => {
-  const { data: weeks, isLoading, isError } = getWeeks(postId);
+  const { data: weeks, isLoading, isError } = useGetWeeks(postId);
 
   if (isLoading) return <div>Loading...</div>;
   if (!weeks || isError) return <div>Error</div>;

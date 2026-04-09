@@ -1,9 +1,8 @@
-import { getSearchParams } from "@/lib/utils";
-import { CategoryType, CourseCatalogMetaType, CourseType } from "@/types";
+import { CategoryType } from "@/types";
 import { useQuery } from "@tanstack/react-query";
 
-export function getCourseCategories() {
-  const query = useQuery<{ data: CategoryType[] }>({
+export function useGetCourseCategories() {
+  const query = useQuery<CategoryType[]>({
     queryKey: ["coursCategories"],
     queryFn: async () => {
       const res = await fetch(
@@ -16,15 +15,15 @@ export function getCourseCategories() {
 
       const data = await res.json();
 
-      return data;
+      return data.data;
     },
   });
 
   return query;
 }
 
-export function getCourseTopics(categories: string[]) {
-  const query = useQuery<{ data: CategoryType[] }>({
+export function useGetCourseTopics(categories: string[]) {
+  const query = useQuery<CategoryType[]>({
     queryKey: ["courseTopics", categories],
     queryFn: async () => {
       const params = new URLSearchParams(window.location.search);
@@ -42,15 +41,15 @@ export function getCourseTopics(categories: string[]) {
 
       const data = await res.json();
 
-      return data;
+      return data.data;
     },
   });
 
   return query;
 }
 
-export function getCourseInstructors() {
-  const query = useQuery<{ data: CategoryType[] }>({
+export function useGetCourseInstructors() {
+  const query = useQuery<CategoryType[]>({
     queryKey: ["instructors"],
     queryFn: async () => {
       const res = await fetch(
@@ -63,7 +62,7 @@ export function getCourseInstructors() {
 
       const data = await res.json();
 
-      return data;
+      return data.data;
     },
   });
 

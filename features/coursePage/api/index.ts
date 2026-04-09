@@ -1,7 +1,7 @@
 import { SessionType, SingleCourseType, TimeType, WeekType } from "@/types";
 import { useMutation, useQuery } from "@tanstack/react-query";
 
-export function getCourse(id: string, token: string) {
+export function useGetCourse(id: string, token: string) {
   const query = useQuery<SingleCourseType>({
     queryKey: ["courses", id, token],
     queryFn: async () => {
@@ -27,7 +27,7 @@ export function getCourse(id: string, token: string) {
   return query;
 }
 
-export function getWeeks(id: number) {
+export function useGetWeeks(id: number) {
   const query = useQuery<WeekType[]>({
     queryKey: ["weeks", id],
     queryFn: async () => {

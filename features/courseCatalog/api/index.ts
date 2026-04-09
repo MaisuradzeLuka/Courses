@@ -11,6 +11,7 @@ type CatalogProps = {
   topics: string[];
   instructors: string[];
   page: number;
+  sort: string;
 };
 
 export function getCourseCatalog({
@@ -18,9 +19,10 @@ export function getCourseCatalog({
   topics,
   instructors,
   page,
+  sort,
 }: CatalogProps) {
   const query = useQuery<CatalogDataType>({
-    queryKey: ["courseCatalog", categories, topics, instructors, page],
+    queryKey: ["courseCatalog", categories, topics, instructors, page, sort],
     queryFn: async () => {
       const params = new URLSearchParams();
 
@@ -37,7 +39,7 @@ export function getCourseCatalog({
       });
 
       const res = await fetch(
-        `${process.env.NEXT_PUBLIC_REQUEST_API_URL}/courses?${params}&page=${page}`,
+        `${process.env.NEXT_PUBLIC_REQUEST_API_URL}/courses?${params}&page=${page}&sort=${sort}`,
       );
 
       if (!res.ok) {

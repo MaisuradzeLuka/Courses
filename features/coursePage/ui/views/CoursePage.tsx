@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { getCourse } from "../../api";
+import { useGetCourse } from "../../api";
 import Description from "../components/Description";
 import EnrollmentData from "../components/EnrollmentData";
 import EnrolledData from "../components/EnrolledData";
@@ -11,11 +11,10 @@ const CoursePage = ({ id }: { id: string }) => {
 
   useEffect(() => {
     const storageToken = localStorage.getItem("token");
-
     if (storageToken) setToken(storageToken);
   }, []);
 
-  const { data: course, isLoading, isError } = getCourse(id, token);
+  const { data: course, isLoading, isError } = useGetCourse(id, token);
 
   if (isLoading) return <div>Loading...</div>;
   if (!course || isError) return <div>Error</div>;

@@ -1,7 +1,7 @@
 import { CategoryType } from "@/types";
 import FilterLayout from "./FilterLayout";
 import { Dispatch, SetStateAction } from "react";
-import { getCourseInstructors } from "../../api";
+import { useGetCourseInstructors } from "../../api";
 
 type Props = {
   filterItems: CategoryType[];
@@ -9,7 +9,7 @@ type Props = {
 };
 
 const Instructors = ({ filterItems, setFilterItems }: Props) => {
-  const { data: instructors, isLoading, isError } = getCourseInstructors();
+  const { data: instructors, isLoading, isError } = useGetCourseInstructors();
 
   if (isLoading) return <div>Loading...</div>;
   if (isError || !instructors) return <div>Error</div>;
@@ -19,7 +19,7 @@ const Instructors = ({ filterItems, setFilterItems }: Props) => {
       <FilterLayout
         paramKey="instructors[]"
         title="Instructors"
-        filterItems={instructors.data}
+        filterItems={instructors}
         selectedFilterItems={filterItems}
         setSelectedFilterItems={setFilterItems}
       />

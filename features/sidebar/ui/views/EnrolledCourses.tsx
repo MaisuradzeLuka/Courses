@@ -12,7 +12,7 @@ import { LuBookOpen } from "react-icons/lu";
 import { useGetEnrolledCourses } from "../../api";
 import { useState } from "react";
 import CourseCard from "@/components/shared/CourseCard";
-import Link from "next/link";
+import EmptyContent from "../components/EmptyContent";
 
 const EnrolledCourses = ({ token }: { token: string }) => {
   const [isOpen, setIsOpen] = useState(false);
@@ -51,26 +51,7 @@ const EnrolledCourses = ({ token }: { token: string }) => {
               />
             ))
           ) : (
-            <div className="h-full flex flex-col justify-center">
-              <div className="flex flex-col items-center gap-6">
-                <div className="text-center">
-                  <h3 className="heading-3 text-brand-800">
-                    No Enrolled Courses Yet
-                  </h3>
-                  <p className="max-w-65 body-xs text-brand-800 mt-2">
-                    Your learning journey starts here! Browse courses to get
-                    started.
-                  </p>
-                </div>
-
-                <Link
-                  href="/browse"
-                  className="py-4 px-6 rounded-lg bg-brand-500 text-gray-50 font-medium"
-                >
-                  Browse Courses
-                </Link>
-              </div>
-            </div>
+            <EmptyContent setIsOpen={setIsOpen} />
           )}
         </div>
       </SheetContent>
