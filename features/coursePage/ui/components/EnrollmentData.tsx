@@ -19,8 +19,6 @@ const EnrollmentData = ({ data, token }: Props) => {
   const [priceModifier, setPriceModifier] = useState<number>(0);
   const [scheduleId, setScheduleId] = useState<number | null>(null);
 
-  console.log(scheduleId);
-
   return (
     <section className="col-span-3">
       <Week

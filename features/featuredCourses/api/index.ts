@@ -5,7 +5,7 @@ type FeaturedReturnType = {
   data: CourseType[];
 };
 
-export function getFeaturedCourses() {
+export function useGetFeaturedCourses() {
   const query = useQuery<FeaturedReturnType>({
     queryKey: ["featuredCourses"],
     queryFn: async () => {

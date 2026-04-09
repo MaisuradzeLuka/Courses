@@ -21,12 +21,12 @@ import FormProgress from "../components/FormProgress";
 import { signUpAction } from "../../api";
 import { useState } from "react";
 import Redirect from "../components/Redirect";
-import { useRouter } from "next/navigation";
 import { useAuthModal } from "@/hooks/useAuthModal";
+import { useQueryClient } from "@tanstack/react-query";
 
 const SignUp = () => {
-  const router = useRouter();
   const mutation = signUpAction();
+  const queryClient = useQueryClient();
   const { signUpOpen, closeSignUp, switchToSignIn, setShowSignUp } =
     useAuthModal();
 
@@ -54,12 +54,10 @@ const SignUp = () => {
     try {
       const { data } = await mutation.mutateAsync(values);
 
-      closeSignUp();
-
       localStorage.setItem("token", data.token);
-      localStorage.setItem("user", JSON.stringify(data.user));
+      queryClient.setQueryData(["me"], data.user);
 
-      router.push("/");
+      closeSignUp();
     } catch (error: any) {
       setFormError(error.message);
     }

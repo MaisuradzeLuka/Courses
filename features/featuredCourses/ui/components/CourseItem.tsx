@@ -52,7 +52,7 @@ const CourseItem = ({
 
         <Link
           className="py-4 px-7 bg-brand-500 rounded-lg text-white mt-4 text-xl font-medium! cursor-pointer disabled:bg-brand-300"
-          href={`/courses/${id}`}
+          href={`/browse/${id}`}
         >
           Details
         </Link>

@@ -4,11 +4,18 @@ import SignIn from "@/features/auth/ui/views/SignIn";
 import SignUp from "@/features/auth/ui/views/SignUp";
 import UserProfile from "@/features/userProfile/ui/views/UserProfile";
 import Link from "next/link";
-import { LuRocket, LuBookOpen } from "react-icons/lu";
+import { LuRocket } from "react-icons/lu";
 import { useEffect, useState } from "react";
+import EnrolledCourses from "@/features/sidebar/ui/views/EnrolledCourses";
+import { useGetUser } from "../../api";
+import { usePathname } from "next/navigation";
+import Image from "next/image";
 
 const Navbar = () => {
+  const pathname = usePathname();
+
   const [token, setToken] = useState<string>("");
+  const { data } = useGetUser(token);
 
   useEffect(() => {
     const storedToken = localStorage.getItem("token") || "";
@@ -23,26 +30,31 @@ const Navbar = () => {
         </Link>
 
         <div className="flex items-center gap-9">
-          <Link href="/browse" className="body-l text-gray-600">
+          <Link
+            href="/browse"
+            className={`flex items-center gap-1 body-l ${pathname === "/browse" ? "text-brand-500" : "text-gray-600"} hover:text-brand-500 transition`}
+          >
+            <Image
+              src="/sparkleIcon.svg"
+              alt="sparkle icon"
+              width={26}
+              height={26}
+              className="w-6.5 h-6.5 text-purple-500"
+            />
             Browse Courses
           </Link>
-          {!token && (
+
+          {!data && (
             <div className="flex items-center gap-2">
               <SignIn />
               <SignUp />
             </div>
           )}
 
-          {token && (
+          {data && (
             <div className="flex items-center gap-9">
-              <Link
-                href="/"
-                className="flex items-center gap-2 body-l text-gray-600"
-              >
-                <LuBookOpen className="mt-1" /> <span>Enrolled Courses</span>
-              </Link>
-
-              <UserProfile />
+              <EnrolledCourses token={token} />
+              <UserProfile {...data} />
             </div>
           )}
         </div>

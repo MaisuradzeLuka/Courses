@@ -1,12 +1,8 @@
-import { CourseType } from "@/types";
+import { CourseType, EnrollmentFullType } from "@/types";
 import { useMutation, useQuery } from "@tanstack/react-query";
 
-type CoursesReturnType = {
-  data: CourseType[];
-};
-
-export function getCoursesInProgress(token: string) {
-  const query = useQuery<CoursesReturnType>({
+export function useGetCoursesInProgress(token: string) {
+  const query = useQuery<EnrollmentFullType[]>({
     queryKey: ["coursesInProgress"],
     queryFn: async () => {
       const res = await fetch(
@@ -22,9 +18,9 @@ export function getCoursesInProgress(token: string) {
         throw new Error("Error while fetching courses in progress");
       }
 
-      const data = res.json();
+      const data = await res.json();
 
-      return data;
+      return data.data;
     },
   });
 

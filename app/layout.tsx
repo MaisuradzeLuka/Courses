@@ -4,6 +4,7 @@ import Providers from "@/providers/tanStackProvider";
 import Navbar from "@/features/navbar/ui/views/Navbar";
 import "./globals.css";
 import Footer from "@/features/footer/ui/views/Footer";
+import EnrolledCourses from "@/features/sidebar/ui/views/EnrolledCourses";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -30,7 +31,7 @@ export default function RootLayout({
       lang="en"
       className={`${geistSans.variable} ${geistMono.variable} h-full antialiased`}
     >
-      <body className="min-h-full flex flex-col bg-gray-100">
+      <body className="w-full min-h-full flex flex-col bg-gray-100">
         <Providers>
           <Navbar />
           <main className="max-w-400 w-full mx-auto">{children}</main>

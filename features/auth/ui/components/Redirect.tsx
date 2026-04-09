@@ -14,10 +14,6 @@ const Redirect = ({ variant, redirectFunction }: RedirectProps) => {
 
       <button
         onClick={() => {
-          console.log(
-            "Redirect button clicked, redirectFunction:",
-            redirectFunction,
-          );
           redirectFunction();
         }}
         className="flex items-center justify-center gap-2 text-xs text-gray-500 cursor-pointer"

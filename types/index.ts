@@ -141,3 +141,23 @@ export type SessionType = {
   availableSeats: number;
   location: string | null;
 };
+
+export type EnrollmentFullType = {
+  id: number;
+  quantity: number;
+  totalPrice: number;
+  progress: number;
+  completedAt: string | null;
+
+  course: CourseType;
+
+  schedule: {
+    location: string | null;
+
+    weeklySchedule: WeekType;
+
+    timeSlot: TimeType;
+
+    sessionType: SessionType;
+  };
+};

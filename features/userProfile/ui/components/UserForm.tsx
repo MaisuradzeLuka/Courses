@@ -48,7 +48,6 @@ const UserForm = ({ email, fullname, age, avatar, mobile }: Props) => {
   const handleSubmit = async (values: UpdateProfileData) => {
     try {
       const { data } = await mutation.mutateAsync(values);
-      console.log(data);
       localStorage.removeItem("user");
       localStorage.setItem("user", JSON.stringify(data));
       router.refresh();

@@ -19,13 +19,13 @@ import { Label } from "@/components/ui/label";
 import { IoEyeOutline, IoEyeOffOutline } from "react-icons/io5";
 import { signInSchema, SignInData } from "@/lib/validations";
 import { Field, FieldLabel } from "@/components/ui/field";
-import { useRouter } from "next/navigation";
 import Redirect from "../components/Redirect";
 import { useAuthModal } from "@/hooks/useAuthModal";
+import { useQueryClient } from "@tanstack/react-query";
 
 const SignIn = ({ styles }: { styles?: string }) => {
-  const router = useRouter();
   const mutation = signInAction();
+  const queryClient = useQueryClient();
   const { signInOpen, closeSignIn, switchToSignUp, setShowSignIn } =
     useAuthModal();
 
@@ -45,12 +45,10 @@ const SignIn = ({ styles }: { styles?: string }) => {
     try {
       const { data } = await mutation.mutateAsync(values);
 
-      closeSignIn();
-
       localStorage.setItem("token", data.token);
-      localStorage.setItem("user", JSON.stringify(data.user));
+      queryClient.setQueryData(["me"], data.user);
 
-      router.push("/");
+      closeSignIn();
     } catch (error: any) {
       setFormError(error.message);
     }

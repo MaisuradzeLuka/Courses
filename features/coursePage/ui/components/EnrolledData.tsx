@@ -21,8 +21,6 @@ const EnrolledData = ({ schedule, progress, id }: EnrollmentType) => {
       } else {
         res = await completeCourse.mutateAsync(id);
       }
-
-      console.log(res);
     } catch (error: any) {
       console.log(error.message);
     }

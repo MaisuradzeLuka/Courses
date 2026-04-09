@@ -1,10 +1,10 @@
 "use client";
 
-import { getFeaturedCourses } from "../../api";
+import { useGetFeaturedCourses } from "../../api";
 import CourseItem from "../components/CourseItem";
 
 const FeaturedCourses = () => {
-  const { data: courses, isLoading, isError } = getFeaturedCourses();
+  const { data: courses, isLoading, isError } = useGetFeaturedCourses();
 
   if (isLoading) return <div>Loading...</div>;
   if (!courses || isError) return <div>Error</div>;
