@@ -1,17 +1,16 @@
+"use client";
+
 import { Button } from "@/components/ui/button";
 import { Field, FieldLabel } from "@/components/ui/field";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-
 import { Controller, useForm } from "react-hook-form";
-
-import { LuPencil } from "react-icons/lu";
-import { IoCheckmark } from "react-icons/io5";
 import { updateProfile } from "../../api";
 import { UpdateProfileData } from "@/lib/validations";
 import { useEffect } from "react";
 import { useRouter } from "next/navigation";
 import UploadImage from "@/components/shared/UploadImage";
+import AgeSelector from "./AgeSelector";
 
 type Props = {
   fullname: string | null;
@@ -25,11 +24,11 @@ const UserForm = ({ email, fullname, age, avatar, mobile }: Props) => {
   const router = useRouter();
   const mutation = updateProfile();
 
-  const form = useForm({
+  const form = useForm<UpdateProfileData>({
     defaultValues: {
       fullname: "",
       email: "",
-      age: 0,
+      age: 16,
       avatar: null,
       mobile: "",
     },
@@ -39,7 +38,7 @@ const UserForm = ({ email, fullname, age, avatar, mobile }: Props) => {
     form.reset({
       fullname: fullname ?? "",
       email: email ?? "",
-      age: age ?? undefined,
+      age: age ?? 16,
       avatar: null,
       mobile: mobile ?? "",
     });
@@ -47,10 +46,12 @@ const UserForm = ({ email, fullname, age, avatar, mobile }: Props) => {
 
   const handleSubmit = async (values: UpdateProfileData) => {
     try {
-      const { data } = await mutation.mutateAsync(values);
-      localStorage.removeItem("user");
-      localStorage.setItem("user", JSON.stringify(data));
-      router.refresh();
+      console.log(values);
+
+      // const { data } = await mutation.mutateAsync(values);
+      // localStorage.removeItem("user");
+      // localStorage.setItem("user", JSON.stringify(data));
+      // router.refresh();
     } catch (error: any) {
       console.log(error.message);
     }
@@ -67,16 +68,21 @@ const UserForm = ({ email, fullname, age, avatar, mobile }: Props) => {
         render={({ field, fieldState }) => (
           <Field>
             <FieldLabel
-              className={`body-xs ${fieldState.invalid ? "text-error" : "text-gray-700"}`}
+              className={`body-xs ${
+                fieldState.invalid ? "text-error" : "text-gray-700"
+              }`}
             >
               Full Name
             </FieldLabel>
 
             <Label className="flex items-center border rounded-lg h-12 mb-1 bg-gray-100 border-gray-200 p-3">
               <Input
-                id="fullname"
                 type="text"
-                className={`pl-0 border-none ${fieldState.invalid ? "border-error focus:border-error text-error" : ""}`}
+                className={`pl-0 border-none ${
+                  fieldState.invalid
+                    ? "border-error focus:border-error text-error"
+                    : ""
+                }`}
                 placeholder="you@example.com"
                 {...field}
               />
@@ -95,17 +101,21 @@ const UserForm = ({ email, fullname, age, avatar, mobile }: Props) => {
         render={({ field, fieldState }) => (
           <Field>
             <FieldLabel
-              className={`body-xs ${fieldState.invalid ? "text-error" : "text-gray-700"}`}
+              className={`body-xs ${
+                fieldState.invalid ? "text-error" : "text-gray-700"
+              }`}
             >
               Email
             </FieldLabel>
 
             <Input
-              id="email"
               readOnly
               type="text"
-              className={`bg-gray-100 mb-1 ${fieldState.invalid ? "border-error focus:border-error text-error" : ""}`}
-              placeholder="you@example.com"
+              className={`bg-gray-100 mb-1 ${
+                fieldState.invalid
+                  ? "border-error focus:border-error text-error"
+                  : ""
+              }`}
               {...field}
             />
 
@@ -123,21 +133,25 @@ const UserForm = ({ email, fullname, age, avatar, mobile }: Props) => {
           render={({ field, fieldState }) => (
             <Field>
               <FieldLabel
-                className={`body-xs ${fieldState.invalid ? "text-error" : "text-gray-700"}`}
+                className={`body-xs ${
+                  fieldState.invalid ? "text-error" : "text-gray-700"
+                }`}
               >
                 Mobile Number
               </FieldLabel>
 
               <Label className="flex items-center border rounded-lg h-12 mb-1 border-gray-200 p-3">
-                <p className=" body-xs text-gray-200 pr-1 border-r border-gray-400">
+                <p className="body-xs text-gray-200 pr-1 border-r border-gray-400">
                   +995
                 </p>
 
                 <Input
-                  id="fullname"
                   type="text"
-                  className={`pl-0 border-none ${fieldState.invalid ? "border-error focus:border-error text-error" : ""}`}
-                  placeholder="you@example.com"
+                  className={`pl-0 border-none ${
+                    fieldState.invalid
+                      ? "border-error focus:border-error text-error"
+                      : ""
+                  }`}
                   {...field}
                 />
               </Label>
@@ -151,9 +165,13 @@ const UserForm = ({ email, fullname, age, avatar, mobile }: Props) => {
           )}
         />
 
-        <select name="gg" id="gg">
-          <option value="dw">fwe</option>
-        </select>
+        <Controller
+          name="age"
+          control={form.control}
+          render={({ field }) => (
+            <AgeSelector value={field.value} onChange={field.onChange} />
+          )}
+        />
       </div>
 
       <UploadImage

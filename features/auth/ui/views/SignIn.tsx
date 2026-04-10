@@ -50,7 +50,7 @@ const SignIn = ({ styles }: { styles?: string }) => {
 
       closeSignIn();
     } catch (error: any) {
-      setFormError(error.message);
+      setFormError(error.props);
     }
   };
 

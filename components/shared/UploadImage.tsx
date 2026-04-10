@@ -3,6 +3,8 @@
 import React, { useRef, useState } from "react";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
+import { Label } from "../ui/label";
+import { FiUpload } from "react-icons/fi";
 
 interface UploadImageProps {
   avatarUrl?: string | null;
@@ -56,23 +58,27 @@ const UploadImage = ({
 
   return (
     <div className="flex flex-col gap-4">
-      <Input
-        ref={fileInputRef}
-        type="file"
-        accept={accept}
-        onChange={handleFileSelect}
-        disabled={disabled || isLoading}
-        className="hidden"
-      />
+      <Label htmlFor="avatar" className="body-xs text-gray-700">
+        Upload Avatar
+      </Label>
 
-      <Button
-        type="button"
-        onClick={handleClick}
-        disabled={disabled || isLoading}
-        className="w-full"
-      >
-        {isLoading ? "Loading..." : "Choose Image"}
-      </Button>
+      <Label className="w-full h-35 flex flex-col items-center justify-center gap-2 border border-gray-200 hover:border-brand-200 hover:bg-brand-100 rounded-lg py-8 cursor-pointer transition">
+        <Input
+          id="avatar"
+          ref={fileInputRef}
+          type="file"
+          accept={accept}
+          onChange={handleFileSelect}
+          disabled={disabled || isLoading}
+          className="hidden"
+        />
+
+        <FiUpload className="text-4xl text-gray-300" />
+        <p className="body-xs text-gray-500">
+          Drag and drop or <span className="text-brand-600">Upload file</span>
+        </p>
+        <p className="text-gray-300 text-xs">JPG, PNG or WebP</p>
+      </Label>
 
       {fileName && (
         <p className="text-sm text-gray-600">Selected: {fileName}</p>
