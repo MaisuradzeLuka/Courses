@@ -1,13 +1,14 @@
 "use client";
 
 import { Button } from "@/components/ui/button";
-import { EnrollmentConflictError, usePostEnrollment } from "../../api";
+import { usePostEnrollment } from "../../api";
 import { useAuthModal } from "@/hooks/useAuthModal";
 import { useGetUser } from "@/features/navbar/api";
 import { SubmitEvent } from "react";
 import { useState } from "react";
 import AuthWarningCard from "./AuthWarningCard";
 import ConflictModal from "./modals/ConflictModal";
+import EnrollementConfirmation from "./modals/EnrollementConfirmation";
 
 type Props = {
   basePrice: number;
@@ -15,6 +16,7 @@ type Props = {
   courseId: number;
   scheduleId: number | null;
   disabled: boolean;
+  courseTitle: string;
 };
 
 const Form = ({
@@ -23,10 +25,14 @@ const Form = ({
   courseId,
   scheduleId,
   disabled,
+  courseTitle,
 }: Props) => {
   const { token, openSignIn, openProfile } = useAuthModal();
   const { data: user } = useGetUser(token);
+
   const [conflictOpen, setConflictOpen] = useState(false);
+  const [enrollementConfirmationOpen, setEnrollementConfirmationOpen] =
+    useState(false);
   const [conflictMessage, setConflictMessage] = useState({
     message: "",
     schedule: "",
@@ -64,6 +70,8 @@ const Form = ({
         setConflictOpen(true);
         return;
       }
+
+      setEnrollementConfirmationOpen(true);
     } catch (error: any) {
       console.log(error);
     }
@@ -144,6 +152,16 @@ const Form = ({
         schedule={conflictMessage.schedule}
         onProceed={handleConflictProceed}
         isPending={mutation.isPending}
+      />
+
+      <EnrollementConfirmation
+        open={enrollementConfirmationOpen}
+        onOpenChange={setEnrollementConfirmationOpen}
+        message={courseTitle}
+        // message={conflictMessage.message}
+        // schedule={conflictMessage.schedule}
+        // onProceed={handleConflictProceed}
+        // isPending={mutation.isPending}
       />
     </>
   );

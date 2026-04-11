@@ -59,6 +59,7 @@ const UserProfile = ({
           age={age}
           avatar={avatar}
           mobile={mobileNumber}
+          setShowProfile={setShowProfile}
         />
       </DialogContent>
     </Dialog>

@@ -11,7 +11,7 @@ export function updateProfile() {
       const formData = new FormData();
       formData.append("full_name", values.fullname);
       formData.append("mobile_number", values.mobile);
-      formData.append("age", "16");
+      formData.append("age", values.age.toString());
       formData.append("avatar", values.avatar || "");
       const token = localStorage.getItem("token");
 

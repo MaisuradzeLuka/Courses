@@ -9,6 +9,7 @@ import { updateProfile } from "../../api";
 import { UpdateProfileData } from "@/lib/validations";
 import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
+import { useQueryClient } from "@tanstack/react-query";
 import UploadImage from "@/components/shared/UploadImage";
 import AgeSelector from "./AgeSelector";
 
@@ -18,10 +19,18 @@ type Props = {
   mobile: string | null;
   age: number | null;
   avatar: string | null;
+  setShowProfile: (open: boolean) => void;
 };
 
-const UserForm = ({ email, fullname, age, avatar, mobile }: Props) => {
-  const router = useRouter();
+const UserForm = ({
+  email,
+  fullname,
+  age,
+  avatar,
+  mobile,
+  setShowProfile,
+}: Props) => {
+  const queryClient = useQueryClient();
   const mutation = updateProfile();
   const [formError, setFormError] = useState("");
 
@@ -48,9 +57,8 @@ const UserForm = ({ email, fullname, age, avatar, mobile }: Props) => {
   const handleSubmit = async (values: UpdateProfileData) => {
     try {
       const { data } = await mutation.mutateAsync(values);
-      localStorage.removeItem("user");
-      localStorage.setItem("user", JSON.stringify(data));
-      router.refresh();
+      queryClient.setQueryData(["me"], data);
+      setShowProfile(false);
     } catch (error: any) {
       setFormError(error.message);
     }

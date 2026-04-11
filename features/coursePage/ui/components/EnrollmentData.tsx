@@ -151,6 +151,7 @@ const EnrollmentData = ({ data }: Props) => {
       </Collapsible>
 
       <Form
+        courseTitle={data.data.title}
         disabled={!selectedSession || !selectedTime || !selectedWeek}
         basePrice={Number(data.data.basePrice)}
         courseId={data.data.id}
