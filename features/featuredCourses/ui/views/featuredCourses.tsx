@@ -1,12 +1,13 @@
 "use client";
 
 import { useGetFeaturedCourses } from "../../api";
+import { FeaturedCoursesSkeleton } from "../skeletons";
 import CourseItem from "../components/CourseItem";
 
 const FeaturedCourses = () => {
   const { data: courses, isLoading, isError } = useGetFeaturedCourses();
 
-  if (isLoading) return <div>Loading...</div>;
+  if (isLoading) return <FeaturedCoursesSkeleton />;
   if (!courses || isError) return <div>Error</div>;
 
   return (

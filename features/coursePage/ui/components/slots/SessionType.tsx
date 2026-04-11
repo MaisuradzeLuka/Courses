@@ -1,7 +1,8 @@
+import { EnrollmentSlotSkeleton } from "@/features/coursePage/ui/skeletons";
 import { sessionData } from "@/constants/EnrollementSlots";
 import { Dispatch, SetStateAction } from "react";
 import SlotCard from "./SlotCard";
-import { useGetSessionType } from "../../api";
+import { useGetSessionType } from "../../../api";
 import { IoWarningOutline } from "react-icons/io5";
 import { RiErrorWarningLine } from "react-icons/ri";
 
@@ -30,7 +31,7 @@ const SessionType = ({
     isError,
   } = useGetSessionType({ id: postId, weekId, timeId: timeSlotId });
 
-  if (isLoading) return <div>Loading...</div>;
+  if (isLoading) return <EnrollmentSlotSkeleton variant="session" />;
   if (!sessionTypes || isError) return <div>Error</div>;
 
   const handleChange = (sessionId: number, priceModifier: string) => {
@@ -43,8 +44,7 @@ const SessionType = ({
   };
 
   return (
-    <div className="mt-12">
-      <h3 className="heading-3 text-brand-800 mb-6.5">Session Type</h3>
+    <div>
       <div className="grid grid-cols-3 gap-3">
         {sessionData.map((session) => {
           const correspondingSession = sessionTypes.find(
@@ -59,7 +59,7 @@ const SessionType = ({
           return (
             <div
               key={`session-${session.id}`}
-              className="flex flex-col items-center gap-2"
+              className="flex flex-col items-center gap-2 group"
             >
               <SlotCard
                 variant="vartical"
@@ -73,7 +73,7 @@ const SessionType = ({
                 styles="gap-1.5"
               >
                 <session.icon
-                  className={`text-2xl hover:text-brand-500 ${!isDisabled && !isActive ? "text-gray-600" : ""}`}
+                  className={`text-2xl group-hover:text-brand-500 ${!isDisabled && !isActive ? "text-gray-600" : ""}`}
                 />
 
                 <h4>{session.label}</h4>

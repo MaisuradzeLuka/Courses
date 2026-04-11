@@ -2,6 +2,7 @@
 
 import { useAuthModal } from "@/hooks/useAuthModal";
 import { useGetCourse } from "../../api";
+import { CoursePageSkeleton } from "../skeletons";
 import Description from "../components/Description";
 import EnrollmentData from "../components/EnrollmentData";
 import EnrolledData from "../components/EnrolledData";
@@ -11,7 +12,7 @@ const CoursePage = ({ id }: { id: string }) => {
 
   const { data: course, isLoading, isError } = useGetCourse(id, token);
 
-  if (isLoading) return <div>Loading...</div>;
+  if (isLoading) return <CoursePageSkeleton />;
   if (!course || isError) return <div>Error</div>;
 
   return (
@@ -20,9 +21,14 @@ const CoursePage = ({ id }: { id: string }) => {
       <div className="grid grid-cols-8 gap-33">
         <Description {...course} />
         {course.data.enrollment ? (
-          <EnrolledData {...course.data.enrollment} />
+          <EnrolledData
+            enrollment={course.data.enrollment}
+            isRated={course.data.isRated}
+            courseId={course.data.id}
+            token={token}
+          />
         ) : (
-          <EnrollmentData data={course} token={token} />
+          <EnrollmentData data={course} />
         )}
       </div>
     </>

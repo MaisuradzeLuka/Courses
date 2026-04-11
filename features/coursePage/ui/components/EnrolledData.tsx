@@ -5,22 +5,32 @@ import { FiMonitor } from "react-icons/fi";
 import { Field, FieldLabel } from "@/components/ui/field";
 import { Progress } from "@/components/ui/progress";
 import { Button } from "@/components/ui/button";
-import { CompleteCourse, RetakeCourse } from "@/features/coursesInProgress/api";
+import {
+  usePostCompleteCourse,
+  usePostRetakeCourse,
+} from "@/features/coursesInProgress/api";
 import RateComponent from "./RateComponent";
 
-const EnrolledData = ({ schedule, progress, id }: EnrollmentType) => {
-  const deleteEnrollement = RetakeCourse();
-  const completeCourse = CompleteCourse();
+type Props = {
+  enrollment: EnrollmentType;
+  isRated: boolean;
+  token: string;
+  courseId: number;
+};
 
-  const isCompleted = progress === 100;
+const EnrolledData = ({ enrollment, isRated, token, courseId }: Props) => {
+  const deleteEnrollement = usePostRetakeCourse();
+  const completeCourse = usePostCompleteCourse();
+
+  const isCompleted = enrollment.progress === 100;
 
   const handleClick = async () => {
     try {
       let res;
       if (isCompleted) {
-        res = await deleteEnrollement.mutateAsync(id);
+        res = await deleteEnrollement.mutateAsync(enrollment.id);
       } else {
-        res = await completeCourse.mutateAsync(id);
+        res = await completeCourse.mutateAsync(enrollment.id);
       }
     } catch (error: any) {
       console.log(error.message);
@@ -38,23 +48,23 @@ const EnrolledData = ({ schedule, progress, id }: EnrollmentType) => {
       <div className="flex flex-col gap-5.5 mt-5.5 body-l text-gray-600">
         <div className="flex items-center gap-3">
           <PiCalendarDotsDuotone className="text-xl mt-1" />
-          <span>{schedule.weeklySchedule.label}</span>
+          <span>{enrollment.schedule.weeklySchedule.label}</span>
         </div>
 
         <div className="flex items-center gap-3">
           <PiClock className="text-xl mt-1" />
-          <span>{schedule.timeSlot.label}</span>
+          <span>{enrollment.schedule.timeSlot.label}</span>
         </div>
 
         <div className="flex items-center gap-3">
           <FiMonitor className="text-xl mt-1" />
-          <span>{schedule.sessionType.name}</span>
+          <span>{enrollment.schedule.sessionType.name}</span>
         </div>
 
-        {schedule.location && (
+        {enrollment.schedule.location && (
           <div className="flex items-center gap-3">
             <SlLocationPin className="text-xl mt-1" />
-            <span>{schedule.location}</span>
+            <span>{enrollment.schedule.location}</span>
           </div>
         )}
       </div>
@@ -65,19 +75,22 @@ const EnrolledData = ({ schedule, progress, id }: EnrollmentType) => {
           className="flex flex-row-reverse justify-start w-max! text-xs heading-4 text-gray-500 mt-12"
         >
           <span>Upload progress</span>
-          <span className="ml-auto">{progress}%</span>
+          <span className="ml-auto">{enrollment.progress}%</span>
         </FieldLabel>
-        <Progress value={progress} id="progress-upload" />
+        <Progress value={enrollment.progress} id="progress-upload" />
       </Field>
 
       <Button
+        disabled={deleteEnrollement.isPending || completeCourse.isPending}
         onClick={handleClick}
         className="w-full bg-brand-500 rounded-lg text-gray-50 py-7 text-xl font-medium my-10 cursor-pointer"
       >
         {isCompleted ? "Retake Course" : "Complete Course"}
       </Button>
 
-      {isCompleted && <RateComponent />}
+      {isCompleted && (
+        <RateComponent isRated={isRated} courseId={courseId} token={token} />
+      )}
     </section>
   );
 };

@@ -74,3 +74,15 @@
 .body-xs {
   @apply text-sm font-medium;
 }
+
+/* Collapsible panel animation */
+[data-slot="collapsible-content"] {
+  overflow: hidden;
+  transition: height 250ms ease;
+}
+[data-slot="collapsible-content"][data-open] {
+  height: var(--collapsible-panel-height);
+}
+[data-slot="collapsible-content"][data-closed] {
+  height: 0;
+}

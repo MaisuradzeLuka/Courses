@@ -2,6 +2,7 @@
 
 import { useRouter, useSearchParams } from "next/navigation";
 import { getCourseCatalog } from "../../api";
+import { CourseCatalogSkeleton } from "../skeletons";
 import CourseCard from "../components/CourseCard";
 import CoursePagination from "../components/Pagination";
 import SortBy from "../components/SortBy";
@@ -21,7 +22,7 @@ const CourseCatalog = () => {
     isError,
   } = getCourseCatalog({ categories, topics, instructors, page, sort });
 
-  if (isLoading) return <div>Loading...</div>;
+  if (isLoading) return <CourseCatalogSkeleton />;
   if (isError) return <div>Error</div>;
   if (!courses) return <div>No courses to show</div>;
 

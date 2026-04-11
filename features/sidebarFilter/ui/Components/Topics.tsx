@@ -1,3 +1,4 @@
+import { FilterSectionSkeleton } from "@/features/sidebarFilter/ui/skeletons";
 import FilterLayout from "./FilterLayout";
 import { useGetCourseTopics } from "../../api";
 import { useSearchParams } from "next/navigation";
@@ -8,7 +9,7 @@ const Topics = () => {
   const categories = searchParams.getAll("categories[]");
   const { data: topics, isLoading, isError } = useGetCourseTopics(categories);
 
-  if (isLoading) return <div>Loading...</div>;
+  if (isLoading) return <FilterSectionSkeleton />;
   if (isError || !topics) return <div>Error</div>;
 
   return (

@@ -10,6 +10,7 @@ import {
 import UserAvatar from "../components/UserAvatar";
 import UserForm from "../components/UserForm";
 import { UserType } from "@/types";
+import { useAuthModal } from "@/hooks/useAuthModal";
 
 const UserProfile = ({
   avatar,
@@ -20,8 +21,10 @@ const UserProfile = ({
   age,
   mobileNumber,
 }: UserType) => {
+  const { profileOpen, setShowProfile } = useAuthModal();
+
   return (
-    <Dialog>
+    <Dialog open={profileOpen} onOpenChange={setShowProfile}>
       <DialogTrigger>
         <UserAvatar
           avatarUrl={avatar}

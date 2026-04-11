@@ -15,12 +15,16 @@ type AuthModalContextType = {
   setAuthToken: (token: string) => void;
   signInOpen: boolean;
   signUpOpen: boolean;
+  profileOpen: boolean;
   setShowSignIn: (open: boolean) => void;
   setShowSignUp: (open: boolean) => void;
+  setShowProfile: (open: boolean) => void;
   openSignIn: () => void;
   openSignUp: () => void;
+  openProfile: () => void;
   closeSignIn: () => void;
   closeSignUp: () => void;
+  closeProfile: () => void;
   closeAll: () => void;
   switchToSignUp: () => void;
   switchToSignIn: () => void;
@@ -35,6 +39,7 @@ export function AuthModalProvider({ children }: { children: ReactNode }) {
   const [token, setTokenState] = useState("");
   const [signInOpen, setSignInOpen] = useState(false);
   const [signUpOpen, setSignUpOpen] = useState(false);
+  const [profileOpen, setProfileOpen] = useState(false);
 
   useEffect(() => {
     setTokenState(localStorage.getItem("token") ?? "");
@@ -53,6 +58,10 @@ export function AuthModalProvider({ children }: { children: ReactNode }) {
     setSignUpOpen(open);
   };
 
+  const setShowProfile = (open: boolean) => {
+    setProfileOpen(open);
+  };
+
   const openSignIn = () => {
     setSignInOpen(true);
     setSignUpOpen(false);
@@ -63,12 +72,15 @@ export function AuthModalProvider({ children }: { children: ReactNode }) {
     setSignUpOpen(true);
   };
 
+  const openProfile = () => setProfileOpen(true);
   const closeSignIn = () => setSignInOpen(false);
   const closeSignUp = () => setSignUpOpen(false);
+  const closeProfile = () => setProfileOpen(false);
 
   const closeAll = () => {
     setSignInOpen(false);
     setSignUpOpen(false);
+    setProfileOpen(false);
   };
 
   const switchToSignUp = () => {
@@ -86,12 +98,16 @@ export function AuthModalProvider({ children }: { children: ReactNode }) {
     setAuthToken,
     signInOpen,
     signUpOpen,
+    profileOpen,
     setShowSignIn,
     setShowSignUp,
+    setShowProfile,
     openSignIn,
     openSignUp,
+    openProfile,
     closeSignIn,
     closeSignUp,
+    closeProfile,
     closeAll,
     switchToSignUp,
     switchToSignIn,

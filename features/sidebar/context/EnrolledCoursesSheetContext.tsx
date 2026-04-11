@@ -48,16 +48,13 @@ export function EnrolledCoursesSheetProvider({
     [router],
   );
 
-  const value = useMemo(
-    () => ({ openEnrolledCourses }),
-    [openEnrolledCourses],
-  );
+  const value = useMemo(() => ({ openEnrolledCourses }), [openEnrolledCourses]);
 
   return (
     <EnrolledCoursesSheetContext.Provider value={value}>
       {children}
       <Sheet onOpenChange={setIsOpen} open={isOpen}>
-        <SheetContent className="bg-gray-100 border-0! px-14">
+        <SheetContent className="bg-gray-100 border-0! px-14 overflow-y-auto ">
           <SheetHeader className="flex-row justify-between items-end p-0 mt-10.5">
             <SheetTitle className="heading-1 ">Enrolled Courses</SheetTitle>
             <SheetDescription className="font-medium text-[16px]">
@@ -65,7 +62,7 @@ export function EnrolledCoursesSheetProvider({
             </SheetDescription>
           </SheetHeader>
 
-          <div className="h-full flex flex-col">
+          <div className="h-full flex flex-col gap-3 mb-10">
             {data?.length ? (
               data.map((course) => (
                 <CourseCard

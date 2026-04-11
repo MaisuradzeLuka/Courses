@@ -1,32 +1,85 @@
+"use client";
+
 import { Button } from "@/components/ui/button";
-import { usePostEnrollment } from "../../api";
+import { EnrollmentConflictError, usePostEnrollment } from "../../api";
+import { useAuthModal } from "@/hooks/useAuthModal";
+import { useGetUser } from "@/features/navbar/api";
 import { SubmitEvent } from "react";
+import { useState } from "react";
+import AuthWarningCard from "./AuthWarningCard";
+import ConflictModal from "./modals/ConflictModal";
 
 type Props = {
   basePrice: number;
   priceModifier: number;
-  token: string | null;
   courseId: number;
   scheduleId: number | null;
+  disabled: boolean;
 };
 
 const Form = ({
   basePrice,
   priceModifier,
-  token,
   courseId,
   scheduleId,
+  disabled,
 }: Props) => {
+  const { token, openSignIn, openProfile } = useAuthModal();
+  const { data: user } = useGetUser(token);
+  const [conflictOpen, setConflictOpen] = useState(false);
+  const [conflictMessage, setConflictMessage] = useState({
+    message: "",
+    schedule: "",
+  });
   const mutation = usePostEnrollment();
 
   const handleSubmit = async (e: SubmitEvent<HTMLFormElement>) => {
     e.preventDefault();
 
+    if (!token) {
+      openSignIn();
+      return;
+    }
+
+    if (user && !user.profileComplete) {
+      openProfile();
+      return;
+    }
+
     if (!scheduleId) return;
 
-    if (!token) return;
-    await mutation.mutateAsync({ token, courseId, scheduleId });
     try {
+      const data = await mutation.mutateAsync({
+        token,
+        courseId,
+        scheduleId,
+        force: false,
+      });
+
+      if (data.status === 409) {
+        setConflictMessage({
+          message: data.message.conflictingCourseName,
+          schedule: data.message.schedule,
+        });
+        setConflictOpen(true);
+        return;
+      }
+    } catch (error: any) {
+      console.log(error);
+    }
+  };
+
+  const handleConflictProceed = async () => {
+    try {
+      if (!scheduleId) return;
+
+      await mutation.mutateAsync({
+        token,
+        courseId,
+        scheduleId,
+        force: true,
+      });
+      setConflictOpen(false);
     } catch (error: any) {
       console.log(error.message);
     }
@@ -57,12 +110,39 @@ const Form = ({
 
         <Button
           type="submit"
-          disabled={false}
+          disabled={disabled}
           className="heading-4 w-full py-6 bg-brand-500 text-gray-50 disabled:bg-brand-50 disabled:text-brand-200 mt-4 cursor-pointer"
         >
           Enroll Now
         </Button>
       </form>
+
+      {!token && (
+        <AuthWarningCard
+          title="Authentication Required"
+          description="You need sign in to your profile before enrolling in this course."
+          btnLabel="Sign In"
+          onAction={openSignIn}
+        />
+      )}
+
+      {!user?.profileComplete && (
+        <AuthWarningCard
+          title="Complete Your Profile"
+          description="You need to fill in your profile details before enrolling in this course."
+          btnLabel="Complete"
+          onAction={openProfile}
+        />
+      )}
+
+      <ConflictModal
+        open={conflictOpen}
+        onOpenChange={setConflictOpen}
+        message={conflictMessage.message}
+        schedule={conflictMessage.schedule}
+        onProceed={handleConflictProceed}
+        isPending={mutation.isPending}
+      />
     </>
   );
 };

@@ -1,8 +1,9 @@
+import { EnrollmentSlotSkeleton } from "@/features/coursePage/ui/skeletons";
 import { weeksData } from "@/constants/EnrollementSlots";
 import { Dispatch, SetStateAction } from "react";
 import SlotCard from "./SlotCard";
 import { isDisabledSlot } from "@/lib/utils";
-import { useGetWeeks } from "../../api";
+import { useGetWeeks } from "../../../api";
 
 type Props = {
   postId: number;
@@ -13,13 +14,12 @@ type Props = {
 const Week = ({ postId, selectedWeek, setSelectedWeek }: Props) => {
   const { data: weeks, isLoading, isError } = useGetWeeks(postId);
 
-  if (isLoading) return <div>Loading...</div>;
+  if (isLoading) return <EnrollmentSlotSkeleton variant="week" />;
   if (!weeks || isError) return <div>Error</div>;
 
   const weekIds = weeks.map((week) => week.id);
   return (
     <div>
-      <h3 className="heading-3 text-brand-800 mb-6.5">Weekly Schedule</h3>
       <div className="grid grid-cols-4 gap-3 h-23">
         {weeksData.map((week) => (
           <SlotCard

@@ -8,8 +8,8 @@ import { LuRocket } from "react-icons/lu";
 import EnrolledCourses from "@/features/sidebar/ui/views/EnrolledCourses";
 import { useGetUser } from "../../api";
 import { usePathname } from "next/navigation";
-import Image from "next/image";
 import { useAuthModal } from "@/hooks/useAuthModal";
+import SparkleIcon from "../components/SparkleIcon";
 
 const Navbar = () => {
   const pathname = usePathname();
@@ -28,13 +28,7 @@ const Navbar = () => {
             href="/browse"
             className={`flex items-center gap-1 body-l ${pathname === "/browse" ? "text-brand-500" : "text-gray-600"} hover:text-brand-500 transition`}
           >
-            <Image
-              src="/sparkleIcon.svg"
-              alt="sparkle icon"
-              width={26}
-              height={26}
-              className="w-6.5 h-6.5 text-purple-500"
-            />
+            <SparkleIcon className="size-[26px] shrink-0 text-current" />
             Browse Courses
           </Link>
 

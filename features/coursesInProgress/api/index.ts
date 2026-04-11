@@ -1,5 +1,5 @@
 import { CourseType, EnrollmentFullType } from "@/types";
-import { useMutation, useQuery } from "@tanstack/react-query";
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 
 export function useGetCoursesInProgress(token: string) {
   const query = useQuery<EnrollmentFullType[]>({
@@ -27,16 +27,21 @@ export function useGetCoursesInProgress(token: string) {
   return query;
 }
 
-export function CompleteCourse() {
+export function usePostCompleteCourse() {
+  const queryClient = useQueryClient();
+
   const mutation = useMutation({
     mutationFn: async (id: number) => {
+      const token = localStorage.getItem("token");
+      if (!token) throw new Error("Unauthorized");
+
       const res = await fetch(
         `${process.env.NEXT_PUBLIC_REQUEST_API_URL}/enrollments/${id}/complete`,
         {
           method: "PATCH",
           headers: {
             accept: "application/json",
-            Authorization: `Bearer 612|EzbWZVpedyrJHPHoxnVS8g2b391KMz16GLxE7kx095535e34`,
+            Authorization: `Bearer ${token}`,
           },
         },
       );
@@ -49,32 +54,53 @@ export function CompleteCourse() {
 
       return data;
     },
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["courses"] });
+      queryClient.invalidateQueries({ queryKey: ["enrolledCourses"] });
+      queryClient.invalidateQueries({ queryKey: ["coursesInProgress"] });
+    },
   });
 
   return mutation;
 }
 
-export function RetakeCourse() {
+export function usePostRetakeCourse() {
+  const queryClient = useQueryClient();
+
   const mutation = useMutation({
     mutationFn: async (id: number) => {
+      const token = localStorage.getItem("token");
+      if (!token) throw new Error("Unauthorized");
+
       const res = await fetch(
         `${process.env.NEXT_PUBLIC_REQUEST_API_URL}/enrollments/${id}`,
         {
           method: "DELETE",
           headers: {
             accept: "application/json",
-            Authorization: `Bearer 612|EzbWZVpedyrJHPHoxnVS8g2b391KMz16GLxE7kx095535e34`,
+            Authorization: `Bearer ${token}`,
           },
         },
       );
 
-      const data = await res.json();
-
       if (!res.ok) {
-        throw new Error(data.message || "Failed to delete the enrollement");
+        let message = "Failed to delete the enrollement";
+        try {
+          const err = await res.json();
+          message = err.message || message;
+        } catch {
+          // non-JSON error body
+        }
+        throw new Error(message);
       }
 
-      return data;
+      const text = await res.text();
+      return text ? JSON.parse(text) : null;
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["courses"] });
+      queryClient.invalidateQueries({ queryKey: ["enrolledCourses"] });
+      queryClient.invalidateQueries({ queryKey: ["coursesInProgress"] });
     },
   });
 

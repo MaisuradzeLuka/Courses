@@ -43,6 +43,7 @@ const SlotCard = ({
         className="hidden"
         name={name}
         value={value}
+        checked={isActive}
         onChange={() => handleChange(value)}
         disabled={disabled}
       />

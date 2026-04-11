@@ -1,5 +1,5 @@
 import { SessionType, SingleCourseType, TimeType, WeekType } from "@/types";
-import { useMutation, useQuery } from "@tanstack/react-query";
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 
 export function useGetCourse(id: string, token: string) {
   const query = useQuery<SingleCourseType>({
@@ -106,15 +106,39 @@ export function useGetSessionType({
   return query;
 }
 
+export class EnrollmentConflictError extends Error {
+  constructor(message: string) {
+    super(message);
+    this.name = "EnrollmentConflictError";
+  }
+}
+
 type usePostEnrollmentType = {
   scheduleId: number;
   token: string;
   courseId: number;
+  force?: boolean;
+};
+
+type usePostEnrollmentResponse = {
+  status: number;
+  message: {
+    conflictingCourseName: string;
+    conflictingEnrollmentId: number;
+    requestedCourseId: number;
+    schedule: string;
+  };
 };
 
 export function usePostEnrollment() {
-  const mutation = useMutation<any, Error, usePostEnrollmentType>({
-    mutationFn: async ({ token, courseId, scheduleId }) => {
+  const queryClient = useQueryClient();
+
+  const mutation = useMutation<
+    usePostEnrollmentResponse,
+    Error,
+    usePostEnrollmentType
+  >({
+    mutationFn: async ({ token, courseId, scheduleId, force }) => {
       const res = await fetch(
         `${process.env.NEXT_PUBLIC_REQUEST_API_URL!}/enrollments`,
         {
@@ -126,7 +150,55 @@ export function usePostEnrollment() {
           body: JSON.stringify({
             courseId,
             courseScheduleId: scheduleId,
-            force: true,
+            ...(force ? { force: true } : {}),
+          }),
+        },
+      );
+
+      if (res.status === 409) {
+        const conflictData = await res.json();
+        return { status: 409, message: conflictData.conflicts[0] };
+      }
+
+      const data = await res.json();
+
+      if (!res.ok) {
+        throw new Error(data.message || "Failed to enroll in the course");
+      }
+
+      return data;
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["courses"] });
+      queryClient.invalidateQueries({ queryKey: ["enrolledCourses"] });
+      queryClient.invalidateQueries({ queryKey: ["coursesInProgress"] });
+    },
+  });
+
+  return mutation;
+}
+
+type usePostRatingType = {
+  rating: number;
+  token: string;
+  courseId: number;
+};
+
+export function usePostRateCourse() {
+  const queryClient = useQueryClient();
+
+  const mutation = useMutation<any, Error, usePostRatingType>({
+    mutationFn: async ({ token, courseId, rating }) => {
+      const res = await fetch(
+        `${process.env.NEXT_PUBLIC_REQUEST_API_URL!}/courses/${courseId}/reviews`,
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${token}`,
+          },
+          body: JSON.stringify({
+            rating,
           }),
         },
       );
@@ -134,10 +206,15 @@ export function usePostEnrollment() {
       const data = await res.json();
 
       if (!res.ok) {
-        throw new Error(data.message || "Sign in failed");
+        throw new Error(data.message || "Rating failed");
       }
 
       return data;
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["courses"] });
+      queryClient.invalidateQueries({ queryKey: ["enrolledCourses"] });
+      queryClient.invalidateQueries({ queryKey: ["coursesInProgress"] });
     },
   });
 

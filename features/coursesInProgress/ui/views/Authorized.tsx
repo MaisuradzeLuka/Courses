@@ -3,12 +3,13 @@
 import CourseCard from "@/components/shared/CourseCard";
 import { useEnrolledCoursesSheet } from "@/features/sidebar/context/EnrolledCoursesSheetContext";
 import { useGetCoursesInProgress } from "../../api";
+import { ContinueLearningSkeleton } from "../skeletons";
 
 const Authorized = ({ token }: { token: string }) => {
   const { openEnrolledCourses } = useEnrolledCoursesSheet();
   const { data: courses, isLoading, isError } = useGetCoursesInProgress(token);
 
-  if (isLoading) return <div>Loading...</div>;
+  if (isLoading) return <ContinueLearningSkeleton />;
   if (isError) return <div>Error</div>;
   if (!courses?.length) return null;
 
