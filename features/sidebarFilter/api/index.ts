@@ -26,11 +26,12 @@ export function useGetCourseTopics(categories: string[]) {
   const query = useQuery<CategoryType[]>({
     queryKey: ["courseTopics", categories],
     queryFn: async () => {
-      const params = new URLSearchParams(window.location.search);
+      const params = new URLSearchParams();
 
       categories.forEach((id) => {
         params.append("categories[]", id);
       });
+
       const res = await fetch(
         `${process.env.NEXT_PUBLIC_REQUEST_API_URL}/topics?${params}`,
       );

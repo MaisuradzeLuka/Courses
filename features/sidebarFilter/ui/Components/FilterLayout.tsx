@@ -1,56 +1,41 @@
 import CategoryCard from "@/components/shared/CategoryCard";
 import { CategoryIconKey } from "@/constants/category";
-import { findExistingItem } from "@/lib/utils";
 import { CategoryType } from "@/types";
-import { useRouter } from "next/navigation";
-import { Dispatch, SetStateAction } from "react";
+import { useRouter, useSearchParams } from "next/navigation";
 
 type Props = {
   paramKey: string;
   title: string;
   filterItems: CategoryType[];
-  selectedFilterItems: CategoryType[];
-  setSelectedFilterItems: Dispatch<SetStateAction<CategoryType[]>>;
 };
 
-const FilterLayout = ({
-  paramKey,
-  title,
-  filterItems,
-  selectedFilterItems,
-  setSelectedFilterItems,
-}: Props) => {
+const FilterLayout = ({ paramKey, title, filterItems }: Props) => {
   const router = useRouter();
+  const searchParams = useSearchParams();
 
-  const addSearchParams = (items: CategoryType[]) => {
-    const params = new URLSearchParams(window.location.search);
+  const selectedIds = searchParams.getAll(paramKey).map(Number);
+
+  const handleClick = (id: number) => {
+    const params = new URLSearchParams(searchParams.toString());
+
+    const isSelected = selectedIds.includes(id);
 
     params.delete(paramKey);
     params.delete("page");
-    params.delete("topics[]");
 
-    items.forEach((item) => {
-      params.append(paramKey, item.id.toString());
+    if (paramKey === "categories[]") {
+      params.delete("topics[]");
+    }
+
+    const newIds = isSelected
+      ? selectedIds.filter((sid) => sid !== id)
+      : [...selectedIds, id];
+
+    newIds.forEach((sid) => {
+      params.append(paramKey, sid.toString());
     });
 
     router.push(`?${params.toString()}`, { scroll: false });
-  };
-
-  const handleClick = (id: number, label: string) => {
-    const existingItem = findExistingItem(id, selectedFilterItems);
-
-    let newSelectedItems;
-
-    if (existingItem) {
-      newSelectedItems = selectedFilterItems.filter(
-        (category) => category.id !== id,
-      );
-    } else {
-      newSelectedItems = [...selectedFilterItems, { id, name: label }];
-    }
-
-    setSelectedFilterItems(newSelectedItems);
-    addSearchParams(newSelectedItems);
   };
 
   return (
@@ -64,7 +49,8 @@ const FilterLayout = ({
               <input
                 type="checkbox"
                 className="hidden"
-                onClick={() => handleClick(item.id, item.name)}
+                checked={selectedIds.includes(item.id)}
+                onChange={() => handleClick(item.id)}
               />
               <CategoryCard
                 avatar={item.avatar}
@@ -72,7 +58,7 @@ const FilterLayout = ({
                 id={item.id}
                 label={item.name}
                 variant="light"
-                active={findExistingItem(item.id, selectedFilterItems)}
+                active={selectedIds.includes(item.id)}
               />
             </label>
           </li>

@@ -16,18 +16,21 @@ const Item = ({ imageUrl, btnLabel, description, link, title }: Props) => {
         src={imageUrl}
         fill
         alt="carousel item"
-        className="object-cover rounded-4xl"
+        className="object-cover object-center rounded-4xl"
       />
 
-      <div className="z-10 absolute">
-        <h3 className="text-5xl font-bold text-gray-50">{title}</h3>
-
-        <p className="body-xl font-light! text-gray-50 mt-3 mb-10 max-w-3/4">
-          {description}
-        </p>
+      <div className="z-10 absolute flex max-w-3/4 flex-col gap-10">
+        <div>
+          <h3 className="text-5xl font-bold text-gray-50">{title}</h3>
+          {description ? (
+            <p className="body-xl font-light! text-gray-50 mt-3">
+              {description}
+            </p>
+          ) : null}
+        </div>
         <Link
           href={link}
-          className="py-5 px-6 bg-brand-500 rounded-lg text-white mt-4 text-xl font-medium! cursor-pointer disabled:bg-brand-300"
+          className="py-5 px-6 bg-brand-500 rounded-lg text-white w-fit text-xl font-medium! cursor-pointer disabled:bg-brand-300"
         >
           {btnLabel}
         </Link>

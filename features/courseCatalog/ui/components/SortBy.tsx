@@ -6,37 +6,29 @@ import {
   SelectTrigger,
 } from "@/components/ui/select";
 import { sortByData } from "@/constants/filter";
-import { useParams, useRouter } from "next/navigation";
-import { useEffect, useState } from "react";
+import { useRouter, useSearchParams } from "next/navigation";
 
 const SortBy = () => {
   const router = useRouter();
-  const [value, setValue] = useState("");
+  const searchParams = useSearchParams();
 
+  const value = searchParams.get("sort") || "";
   const selectedItem = sortByData.find((item) => item.value === value);
 
-  useEffect(() => {
-    const params = new URLSearchParams(window.location.search);
-    const sort = params.get("sort");
+  const handleChange = (newValue: string) => {
+    const params = new URLSearchParams(searchParams.toString());
 
-    if (sort) setValue(sort);
-  }, []);
-
-  useEffect(() => {
-    const params = new URLSearchParams(window.location.search);
-
-    if (value) {
-      params.set("sort", value);
+    if (newValue) {
+      params.set("sort", newValue);
     } else {
       params.delete("sort");
     }
 
-    const newPath = `${window.location.pathname}?${params.toString()}`;
-    router.replace(newPath);
-  }, [value]);
+    router.replace(`?${params.toString()}`);
+  };
 
   return (
-    <Select value={value} onValueChange={(v) => setValue(v ?? "")}>
+    <Select value={value} onValueChange={(v) => handleChange(v ?? "")}>
       <SelectTrigger className="w-60 bg-gray-50 border-none px-5 py-5 text-[16px] font-medium text-gray-500">
         <span>Sort By: </span>
         <span className="body-s text-brand-500 ml-2">

@@ -2,15 +2,10 @@
 
 import CoursesInProgress from "@/features/coursesInProgress/ui/views/CoursesInProgress";
 import FeaturedCourses from "@/features/featuredCourses/ui/views/featuredCourses";
-import { useEffect, useState } from "react";
+import { useAuthModal } from "@/hooks/useAuthModal";
 
 const DashboardLayoutHelper = () => {
-  const [token, setToken] = useState("");
-
-  useEffect(() => {
-    const storedToken = localStorage.getItem("token") || "";
-    setToken(storedToken);
-  }, []);
+  const { token } = useAuthModal();
 
   return (
     <div className={`flex gap-16 ${token ? "flex-col-reverse" : "flex-col"}`}>

@@ -4,7 +4,6 @@ import Providers from "@/providers/tanStackProvider";
 import Navbar from "@/features/navbar/ui/views/Navbar";
 import "./globals.css";
 import Footer from "@/features/footer/ui/views/Footer";
-import EnrolledCourses from "@/features/sidebar/ui/views/EnrolledCourses";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",

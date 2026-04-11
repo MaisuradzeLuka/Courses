@@ -20,6 +20,7 @@ type Props = {
   sessionLabel: string | null;
   location: string | null;
   progress: number;
+  onViewClick?: () => void;
 };
 
 const CourseCard = ({
@@ -34,6 +35,7 @@ const CourseCard = ({
   timeSlotLabel,
   weeklyLabel,
   progress,
+  onViewClick,
 }: Props) => {
   const imageDimentions = variant === "short" ? "w-35 h-31" : "w-68 h-48";
   return (
@@ -104,12 +106,22 @@ const CourseCard = ({
           <Progress value={progress} id="progress-upload" />
         </Field>
 
-        <Link
-          href={`/browse/${courseId}`}
-          className="flex-1 border-2 border-brand-300 py-3 px-4 rounded-lg text-brand-500 font-medium text-center"
-        >
-          View
-        </Link>
+        {onViewClick ? (
+          <button
+            type="button"
+            onClick={onViewClick}
+            className="flex-1 border-2 border-brand-300 py-3 px-4 rounded-lg text-brand-500 font-medium text-center cursor-pointer"
+          >
+            View
+          </button>
+        ) : (
+          <Link
+            href={`/browse/${courseId}`}
+            className="flex-1 border-2 border-brand-300 py-3 px-4 rounded-lg text-brand-500 font-medium text-center"
+          >
+            View
+          </Link>
+        )}
       </div>
     </Card>
   );

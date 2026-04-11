@@ -1,18 +1,13 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useAuthModal } from "@/hooks/useAuthModal";
 import { useGetCourse } from "../../api";
 import Description from "../components/Description";
 import EnrollmentData from "../components/EnrollmentData";
 import EnrolledData from "../components/EnrolledData";
 
 const CoursePage = ({ id }: { id: string }) => {
-  const [token, setToken] = useState("");
-
-  useEffect(() => {
-    const storageToken = localStorage.getItem("token");
-    if (storageToken) setToken(storageToken);
-  }, []);
+  const { token } = useAuthModal();
 
   const { data: course, isLoading, isError } = useGetCourse(id, token);
 

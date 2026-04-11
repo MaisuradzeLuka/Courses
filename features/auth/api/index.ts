@@ -1,9 +1,8 @@
 import { SignInData, SignUpData } from "@/lib/validations";
 import { AuthType } from "@/types";
 import { useMutation } from "@tanstack/react-query";
-import Error from "next/error";
 
-export function signInAction() {
+export function useSignInMutation() {
   const mutation = useMutation<AuthType, Error, SignInData>({
     mutationFn: async (values: SignInData) => {
       const res = await fetch(
@@ -30,7 +29,7 @@ export function signInAction() {
   return mutation;
 }
 
-export function signUpAction() {
+export function useSignUpMutation() {
   const mutation = useMutation<AuthType, Error, SignUpData>({
     mutationFn: async (values: SignUpData) => {
       const formData = new FormData();
@@ -56,7 +55,7 @@ export function signUpAction() {
       const data = await res.json();
 
       if (!res.ok) {
-        throw new Error(data.message || "Sign in failed");
+        throw new Error(data.message || "Sign up failed");
       }
 
       return data;

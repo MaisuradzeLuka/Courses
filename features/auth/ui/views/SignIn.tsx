@@ -12,7 +12,7 @@ import { Button } from "@base-ui/react";
 import { useState } from "react";
 import { useForm, Controller } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { signInAction } from "../../api";
+import { useSignInMutation } from "../../api";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 
@@ -24,10 +24,15 @@ import { useAuthModal } from "@/hooks/useAuthModal";
 import { useQueryClient } from "@tanstack/react-query";
 
 const SignIn = ({ styles }: { styles?: string }) => {
-  const mutation = signInAction();
+  const mutation = useSignInMutation();
   const queryClient = useQueryClient();
-  const { signInOpen, closeSignIn, switchToSignUp, setShowSignIn } =
-    useAuthModal();
+  const {
+    signInOpen,
+    closeSignIn,
+    switchToSignUp,
+    setShowSignIn,
+    setAuthToken,
+  } = useAuthModal();
 
   const [formError, setFormError] = useState("");
   const [showPassword, setShowPassword] = useState(false);
@@ -45,12 +50,14 @@ const SignIn = ({ styles }: { styles?: string }) => {
     try {
       const { data } = await mutation.mutateAsync(values);
 
-      localStorage.setItem("token", data.token);
+      setAuthToken(data.token);
       queryClient.setQueryData(["me"], data.user);
 
       closeSignIn();
-    } catch (error: any) {
-      setFormError(error.props);
+    } catch (error: unknown) {
+      const message =
+        error instanceof Error ? error.message : "Something went wrong";
+      setFormError(message);
     }
   };
 

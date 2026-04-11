@@ -1,8 +1,11 @@
+"use client";
+
 import CourseCard from "@/components/shared/CourseCard";
+import { useEnrolledCoursesSheet } from "@/features/sidebar/context/EnrolledCoursesSheetContext";
 import { useGetCoursesInProgress } from "../../api";
-import Link from "next/link";
 
 const Authorized = ({ token }: { token: string }) => {
+  const { openEnrolledCourses } = useEnrolledCoursesSheet();
   const { data: courses, isLoading, isError } = useGetCoursesInProgress(token);
 
   if (isLoading) return <div>Loading...</div>;
@@ -17,12 +20,13 @@ const Authorized = ({ token }: { token: string }) => {
           <p className="text-[18px] text-gray-700">Pick up where you left</p>
         </div>
 
-        <Link
-          href="browse"
-          className="text-xl font-medium hover:text-brand-500 underline underline-offset-3 transtiion"
+        <button
+          type="button"
+          onClick={openEnrolledCourses}
+          className="text-xl font-medium hover:text-brand-500 underline underline-offset-3 cursor-pointer transition"
         >
           See All
-        </Link>
+        </button>
       </div>
 
       <div className="grid grid-cols-3 gap-6">

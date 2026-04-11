@@ -18,22 +18,34 @@ import { Button } from "@/components/ui/button";
 import { SignUpData, signUpSchema } from "@/lib/validations";
 import { TfiAngleLeft } from "react-icons/tfi";
 import FormProgress from "../components/FormProgress";
-import { signUpAction } from "../../api";
-import { useState } from "react";
+import { useSignUpMutation } from "../../api";
+import { useEffect, useState } from "react";
 import Redirect from "../components/Redirect";
 import { useAuthModal } from "@/hooks/useAuthModal";
 import { useQueryClient } from "@tanstack/react-query";
 
+const SIGN_UP_STEP_FIELDS: (keyof SignUpData)[][] = [
+  ["email"],
+  ["password", "confirmPassword"],
+  ["username"],
+];
+
 const SignUp = () => {
-  const mutation = signUpAction();
+  const mutation = useSignUpMutation();
   const queryClient = useQueryClient();
-  const { signUpOpen, closeSignUp, switchToSignIn, setShowSignUp } =
-    useAuthModal();
+  const {
+    signUpOpen,
+    closeSignUp,
+    switchToSignIn,
+    setShowSignUp,
+    setAuthToken,
+  } = useAuthModal();
 
   const [formError, setFormError] = useState("");
 
   const form = useForm<SignUpData>({
     resolver: zodResolver(signUpSchema),
+    mode: "onBlur",
     defaultValues: {
       email: "",
       password: "",
@@ -45,21 +57,32 @@ const SignUp = () => {
 
   const { step, next, back, isFirstStep, isLastStep, currentStepIndex, steps } =
     useMultiStepForm([
-      <SignUpEmail control={form.control} />,
-      <SignUpPassword control={form.control} />,
-      <SignUpUsername control={form.control} />,
+      <SignUpEmail key="email" control={form.control} />,
+      <SignUpPassword key="password" control={form.control} />,
+      <SignUpUsername key="username" control={form.control} />,
     ]);
+
+  useEffect(() => {
+    setFormError("");
+  }, [currentStepIndex]);
+
+  const handleNext = async () => {
+    const ok = await form.trigger(SIGN_UP_STEP_FIELDS[currentStepIndex]);
+    if (ok) next();
+  };
 
   const handleSubmit = async (values: SignUpData) => {
     try {
       const { data } = await mutation.mutateAsync(values);
 
-      localStorage.setItem("token", data.token);
+      setAuthToken(data.token);
       queryClient.setQueryData(["me"], data.user);
 
       closeSignUp();
-    } catch (error: any) {
-      setFormError(error.message);
+    } catch (error: unknown) {
+      const message =
+        error instanceof Error ? error.message : "Something went wrong";
+      setFormError(message);
     }
   };
 
@@ -89,7 +112,13 @@ const SignUp = () => {
           {step}
 
           {formError && (
-            <p className="text-error text-sm mt-2 text-center">{formError}</p>
+            <p
+              className="text-error text-sm mt-4 text-center"
+              role="alert"
+              aria-live="polite"
+            >
+              {formError}
+            </p>
           )}
 
           {isLastStep && (
@@ -106,7 +135,7 @@ const SignUp = () => {
             <Button
               type="button"
               className="w-full py-5 bg-brand-500 rounded-lg text-white mt-4 text-[16px] font-medium cursor-pointer"
-              onClick={next}
+              onClick={handleNext}
             >
               Next
             </Button>

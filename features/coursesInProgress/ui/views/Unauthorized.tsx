@@ -1,22 +1,12 @@
 import CourseCard from "@/components/shared/CourseCard";
-import Link from "next/link";
 import LogInCard from "../components/LogInCard";
 
 const Unauthorized = () => {
   return (
     <section>
-      <div className="flex justify-between items-end pb-8">
-        <div className="mb-8">
-          <h2 className="heading-1">Continue Learning</h2>
-          <p className="text-[18px] text-gray-700">Pick up where you left</p>
-        </div>
-
-        <Link
-          href="browse"
-          className="text-xl font-medium hover:text-brand-500 underline underline-offset-3 transtiion"
-        >
-          See All
-        </Link>
+      <div className="mb-8">
+        <h2 className="heading-1">Continue Learning</h2>
+        <p className="text-[18px] text-gray-700">Pick up where you left</p>
       </div>
 
       <div className="relative grid grid-cols-3 gap-6">

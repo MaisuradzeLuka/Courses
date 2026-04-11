@@ -1,8 +1,18 @@
 "use client";
 
-import { createContext, useContext, useState, ReactNode } from "react";
+import { useQueryClient } from "@tanstack/react-query";
+import {
+  createContext,
+  useCallback,
+  useContext,
+  useEffect,
+  useState,
+  ReactNode,
+} from "react";
 
 type AuthModalContextType = {
+  token: string;
+  setAuthToken: (token: string) => void;
   signInOpen: boolean;
   signUpOpen: boolean;
   setShowSignIn: (open: boolean) => void;
@@ -21,8 +31,19 @@ const AuthModalContext = createContext<AuthModalContextType | undefined>(
 );
 
 export function AuthModalProvider({ children }: { children: ReactNode }) {
+  const queryClient = useQueryClient();
+  const [token, setTokenState] = useState("");
   const [signInOpen, setSignInOpen] = useState(false);
   const [signUpOpen, setSignUpOpen] = useState(false);
+
+  useEffect(() => {
+    setTokenState(localStorage.getItem("token") ?? "");
+  }, []);
+
+  const setAuthToken = useCallback((next: string) => {
+    localStorage.setItem("token", next);
+    setTokenState(next);
+  }, []);
 
   const setShowSignIn = (open: boolean) => {
     setSignInOpen(open);
@@ -61,6 +82,8 @@ export function AuthModalProvider({ children }: { children: ReactNode }) {
   };
 
   const value: AuthModalContextType = {
+    token,
+    setAuthToken,
     signInOpen,
     signUpOpen,
     setShowSignIn,

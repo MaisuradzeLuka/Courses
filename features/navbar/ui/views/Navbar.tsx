@@ -5,22 +5,16 @@ import SignUp from "@/features/auth/ui/views/SignUp";
 import UserProfile from "@/features/userProfile/ui/views/UserProfile";
 import Link from "next/link";
 import { LuRocket } from "react-icons/lu";
-import { useEffect, useState } from "react";
 import EnrolledCourses from "@/features/sidebar/ui/views/EnrolledCourses";
 import { useGetUser } from "../../api";
 import { usePathname } from "next/navigation";
 import Image from "next/image";
+import { useAuthModal } from "@/hooks/useAuthModal";
 
 const Navbar = () => {
   const pathname = usePathname();
-
-  const [token, setToken] = useState<string>("");
+  const { token } = useAuthModal();
   const { data } = useGetUser(token);
-
-  useEffect(() => {
-    const storedToken = localStorage.getItem("token") || "";
-    setToken(storedToken);
-  }, []);
 
   return (
     <div className="py-6 border-b border-gray-200">
@@ -53,7 +47,7 @@ const Navbar = () => {
 
           {data && (
             <div className="flex items-center gap-9">
-              <EnrolledCourses token={token} />
+              <EnrolledCourses />
               <UserProfile {...data} />
             </div>
           )}
