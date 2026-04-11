@@ -27,8 +27,13 @@ const AgeSelector = ({ value, onChange }: Props) => {
           <SelectValue placeholder="Age" />
         </SelectTrigger>
 
-        <SelectContent className="bg-gray-50 ring-0 shadow-none">
-          <SelectGroup>
+        <SelectContent
+          side="bottom"
+          sideOffset={4}
+          alignItemWithTrigger={false}
+          className="bg-gray-50 ring-0 max-h-[300px]"
+        >
+          <SelectGroup className="p-0">
             {ageData.map((age) => (
               <SelectItem
                 key={age.id}

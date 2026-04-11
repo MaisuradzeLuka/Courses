@@ -7,7 +7,7 @@ import { Label } from "@/components/ui/label";
 import { Controller, useForm } from "react-hook-form";
 import { updateProfile } from "../../api";
 import { UpdateProfileData } from "@/lib/validations";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import UploadImage from "@/components/shared/UploadImage";
 import AgeSelector from "./AgeSelector";
@@ -23,6 +23,7 @@ type Props = {
 const UserForm = ({ email, fullname, age, avatar, mobile }: Props) => {
   const router = useRouter();
   const mutation = updateProfile();
+  const [formError, setFormError] = useState("");
 
   const form = useForm<UpdateProfileData>({
     defaultValues: {
@@ -46,14 +47,12 @@ const UserForm = ({ email, fullname, age, avatar, mobile }: Props) => {
 
   const handleSubmit = async (values: UpdateProfileData) => {
     try {
-      console.log(values);
-
-      // const { data } = await mutation.mutateAsync(values);
-      // localStorage.removeItem("user");
-      // localStorage.setItem("user", JSON.stringify(data));
-      // router.refresh();
+      const { data } = await mutation.mutateAsync(values);
+      localStorage.removeItem("user");
+      localStorage.setItem("user", JSON.stringify(data));
+      router.refresh();
     } catch (error: any) {
-      console.log(error.message);
+      setFormError(error.message);
     }
   };
 
@@ -177,12 +176,22 @@ const UserForm = ({ email, fullname, age, avatar, mobile }: Props) => {
       <UploadImage
         avatarUrl={avatar}
         onUpload={(file) => {
+          setFormError("");
           form.setValue("avatar", file as any);
+        }}
+        onError={(error) => {
+          setFormError(error.message);
+          form.setValue("avatar", null);
         }}
       />
 
+      {formError && (
+        <p className="text-error text-sm mt-2 text-center">{formError}</p>
+      )}
+
       <Button
         type="submit"
+        disabled={mutation.isPending}
         className="w-full py-6 bg-brand-500 rounded-lg text-white mt-4 text-[16px] font-medium cursor-pointer disabled:bg-brand-300"
       >
         Update Profile

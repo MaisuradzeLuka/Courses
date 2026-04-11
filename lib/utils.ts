@@ -52,3 +52,8 @@ export function isDisabledSlot({
 
   return isDisabled;
 }
+
+export function formatFileSizeMB(bytes: number, decimals = 2) {
+  const mb = bytes / (1024 * 1024);
+  return `${mb.toFixed(decimals)} MB`;
+}

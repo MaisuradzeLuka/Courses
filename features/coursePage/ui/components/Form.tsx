@@ -105,7 +105,9 @@ const Form = ({
 
         <div className="flex justify-between">
           <h3 className="body-s text-gray-400">Session Type</h3>
-          <span className="body-s text-gray-800">+ ${priceModifier}</span>
+          <span className="body-s text-gray-800">
+            {priceModifier ? `+ $${priceModifier}` : "Included"}
+          </span>
         </div>
 
         <Button

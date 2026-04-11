@@ -59,7 +59,7 @@ const SessionType = ({
           return (
             <div
               key={`session-${session.id}`}
-              className="flex flex-col items-center gap-2 group"
+              className="flex flex-col items-center gap-2"
             >
               <SlotCard
                 variant="vartical"
@@ -70,10 +70,10 @@ const SessionType = ({
                 handleChange={() =>
                   handleChange(session.id, session.priceModifier)
                 }
-                styles="gap-1.5"
+                styles="gap-1.5 group"
               >
                 <session.icon
-                  className={`text-2xl group-hover:text-brand-500 ${!isDisabled && !isActive ? "text-gray-600" : ""}`}
+                  className={`text-2xl group-hover:text-brand-500 ${isDisabled && !isActive ? "text-gray-600" : ""}`}
                 />
 
                 <h4>{session.label}</h4>

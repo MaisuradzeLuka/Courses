@@ -13,7 +13,7 @@ const UserAvatar = ({ avatarUrl, ping }: Props) => {
         width={54}
         height={54}
         alt="user avatar"
-        className={`${avatarUrl ? "w-full h-full rounded-full object-cover" : ""}`}
+        className={`${avatarUrl ? "w-full h-full rounded-full object-cover" : " w-9 h-9"}`}
       />
 
       <Image
