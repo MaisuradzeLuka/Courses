@@ -15,9 +15,10 @@ import { ChevronDown } from "lucide-react";
 
 type Props = {
   data: SingleCourseType;
+  onEnrollmentSuccess?: () => void;
 };
 
-const EnrollmentData = ({ data }: Props) => {
+const EnrollmentData = ({ data, onEnrollmentSuccess }: Props) => {
   const [selectedWeek, setSelectedWeek] = useState<number | null>(null);
   const [selectedTime, setSelectedTime] = useState<number | null>(null);
   const [selectedSession, setSelectedSession] = useState<number | null>(null);
@@ -151,12 +152,12 @@ const EnrollmentData = ({ data }: Props) => {
       </Collapsible>
 
       <Form
-        courseTitle={data.data.title}
         disabled={!selectedSession || !selectedTime || !selectedWeek}
         basePrice={Number(data.data.basePrice)}
         courseId={data.data.id}
         priceModifier={priceModifier}
         scheduleId={scheduleId}
+        onEnrollmentSuccess={onEnrollmentSuccess}
       />
     </section>
   );

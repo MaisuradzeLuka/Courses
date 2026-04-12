@@ -1,9 +1,15 @@
 import BreadCrumbs from "@/components/shared/BreadCrumbs";
 import CourseCatalog from "@/features/courseCatalog/ui/views/CourseCatalog";
 import SidebarFilter from "@/features/sidebarFilter/ui/views/SidebarFilter";
+import { SearchParamsType } from "@/types";
 import { Suspense } from "react";
 
-export default function BrowsePage() {
+export default async function BrowsePage({
+  searchParams,
+}: {
+  searchParams: Promise<SearchParamsType>;
+}) {
+  const { categories, topics, instructors, page, sort } = await searchParams;
   return (
     <div>
       <BreadCrumbs />
@@ -17,7 +23,7 @@ export default function BrowsePage() {
           }
         >
           <SidebarFilter />
-          <CourseCatalog />
+          <CourseCatalog categories={categories || []} />
         </Suspense>
       </div>
     </div>

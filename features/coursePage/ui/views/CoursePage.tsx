@@ -6,9 +6,15 @@ import { CoursePageSkeleton } from "../skeletons";
 import Description from "../components/Description";
 import EnrollmentData from "../components/EnrollmentData";
 import EnrolledData from "../components/EnrolledData";
+import EnrollementConfirmation from "../components/modals/EnrollementConfirmation";
+import CourseCompletionModal from "../components/modals/CourseCompletionModal";
+import { useState } from "react";
 
 const CoursePage = ({ id }: { id: string }) => {
   const { token } = useAuthModal();
+  const [enrollmentConfirmationOpen, setEnrollmentConfirmationOpen] =
+    useState(false);
+  const [courseCompletionOpen, setCourseCompletionOpen] = useState(false);
 
   const { data: course, isLoading, isError } = useGetCourse(id, token);
 
@@ -26,11 +32,31 @@ const CoursePage = ({ id }: { id: string }) => {
             isRated={course.data.isRated}
             courseId={course.data.id}
             token={token}
+            onCourseCompleted={() => setCourseCompletionOpen(true)}
+            onRequestCompletionModal={() => setCourseCompletionOpen(true)}
           />
         ) : (
-          <EnrollmentData data={course} />
+          <EnrollmentData
+            data={course}
+            onEnrollmentSuccess={() => setEnrollmentConfirmationOpen(true)}
+          />
         )}
       </div>
+
+      <EnrollementConfirmation
+        open={enrollmentConfirmationOpen}
+        onOpenChange={setEnrollmentConfirmationOpen}
+        courseTitle={course.data.title}
+      />
+
+      <CourseCompletionModal
+        open={courseCompletionOpen}
+        onOpenChange={setCourseCompletionOpen}
+        courseTitle={course.data.title}
+        token={token}
+        courseId={course.data.id}
+        isRated={course.data.isRated}
+      />
     </>
   );
 };

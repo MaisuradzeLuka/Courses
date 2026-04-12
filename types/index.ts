@@ -161,3 +161,11 @@ export type EnrollmentFullType = {
     sessionType: SessionType;
   };
 };
+
+export type SearchParamsType = {
+  categories?: string[];
+  topics?: string[];
+  instructors?: string[];
+  page?: string;
+  sort?: string;
+};

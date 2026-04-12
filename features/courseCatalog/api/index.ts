@@ -24,6 +24,8 @@ export function getCourseCatalog({
   const query = useQuery<CatalogDataType>({
     queryKey: ["courseCatalog", categories, topics, instructors, page, sort],
     queryFn: async () => {
+      console.log(categories);
+
       const params = new URLSearchParams();
 
       categories.forEach((id) => {

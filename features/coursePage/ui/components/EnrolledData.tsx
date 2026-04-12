@@ -9,16 +9,23 @@ import {
   usePostCompleteCourse,
   usePostRetakeCourse,
 } from "@/features/coursesInProgress/api";
-import RateComponent from "./RateComponent";
-
 type Props = {
   enrollment: EnrollmentType;
   isRated: boolean;
   token: string;
   courseId: number;
+  onCourseCompleted?: () => void;
+  onRequestCompletionModal?: () => void;
 };
 
-const EnrolledData = ({ enrollment, isRated, token, courseId }: Props) => {
+const EnrolledData = ({
+  enrollment,
+  isRated,
+  token,
+  courseId,
+  onCourseCompleted,
+  onRequestCompletionModal,
+}: Props) => {
   const deleteEnrollement = usePostRetakeCourse();
   const completeCourse = usePostCompleteCourse();
 
@@ -31,6 +38,7 @@ const EnrolledData = ({ enrollment, isRated, token, courseId }: Props) => {
         res = await deleteEnrollement.mutateAsync(enrollment.id);
       } else {
         res = await completeCourse.mutateAsync(enrollment.id);
+        onCourseCompleted?.();
       }
     } catch (error: any) {
       console.log(error.message);
@@ -88,8 +96,14 @@ const EnrolledData = ({ enrollment, isRated, token, courseId }: Props) => {
         {isCompleted ? "Retake Course" : "Complete Course"}
       </Button>
 
-      {isCompleted && (
-        <RateComponent isRated={isRated} courseId={courseId} token={token} />
+      {isCompleted && !isRated && (
+        <button
+          type="button"
+          onClick={() => onRequestCompletionModal?.()}
+          className="body-s mt-6 w-full rounded-lg border-2 border-brand-300 py-4 font-medium text-brand-500 transition hover:bg-brand-50"
+        >
+          Rate your experience
+        </button>
       )}
     </section>
   );
