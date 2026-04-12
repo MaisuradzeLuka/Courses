@@ -10,7 +10,7 @@ const Categories = () => {
 
   return (
     <FilterLayout
-      paramKey="categories"
+      paramKey="categories[]"
       title="Categroies"
       filterItems={categories}
     />

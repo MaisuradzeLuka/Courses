@@ -13,11 +13,7 @@ const Topics = () => {
   if (isError || !topics) return <div>Error</div>;
 
   return (
-    <FilterLayout
-      paramKey="topics[]"
-      title="Topics"
-      filterItems={topics}
-    />
+    <FilterLayout paramKey="topics[]" title="Topics" filterItems={topics} />
   );
 };
 

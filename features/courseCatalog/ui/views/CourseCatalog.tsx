@@ -1,16 +1,15 @@
 "use client";
 
-import { useRouter, useSearchParams } from "next/navigation";
+import { useSearchParams } from "next/navigation";
 import { getCourseCatalog } from "../../api";
 import { CourseCatalogSkeleton } from "../skeletons";
 import CourseCard from "../components/CourseCard";
 import CoursePagination from "../components/Pagination";
 import SortBy from "../components/SortBy";
 
-const CourseCatalog = ({ categories }: { categories: string[] }) => {
+const CourseCatalog = () => {
   const searchParams = useSearchParams();
-
-  // const categories = searchParams.getAll("categories[]");
+  const categories = searchParams.getAll("categories[]");
   const topics = searchParams.getAll("topics[]");
   const instructors = searchParams.getAll("instructors[]");
   const page = Number(searchParams.get("page")) || 1;
