@@ -3,6 +3,8 @@ import BreadCrumbs from "@/components/shared/BreadCrumbs";
 import CourseCatalog from "@/features/courseCatalog/ui/views/CourseCatalog";
 import SidebarFilter from "@/features/sidebarFilter/ui/views/SidebarFilter";
 
+export const dynamic = "force-dynamic";
+
 export default function BrowsePage() {
   return (
     <div>
