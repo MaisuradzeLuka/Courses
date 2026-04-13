@@ -47,8 +47,8 @@ export const updateProfileSchema = z.object({
   mobile: z
     .string()
     .min(1, { message: "Mobile number is required" })
-    .regex(/^(\+995|0)9\d{8}$/, {
-      message: "Mobile must be in Georgian format (+995 or 0)",
+    .regex(/^(\+995|0)?5\d{8}$/, {
+      message: "Mobile must be a valid Georgian number starting with 5",
     }),
   fullname: z
     .string()

@@ -211,8 +211,11 @@ export function usePostRateCourse() {
 
       return data;
     },
-    onSuccess: () => {
+    onSuccess: (_data, { courseId }) => {
       queryClient.invalidateQueries({ queryKey: ["courses"] });
+      queryClient.invalidateQueries({
+        queryKey: ["courses", String(courseId)],
+      });
       queryClient.invalidateQueries({ queryKey: ["enrolledCourses"] });
       queryClient.invalidateQueries({ queryKey: ["coursesInProgress"] });
     },

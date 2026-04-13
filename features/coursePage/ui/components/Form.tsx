@@ -8,6 +8,7 @@ import { SubmitEvent } from "react";
 import { useState } from "react";
 import AuthWarningCard from "./AuthWarningCard";
 import ConflictModal from "./modals/ConflictModal";
+import ProfileIncompleteModal from "./modals/ProfileIncompleteModal";
 
 type Props = {
   basePrice: number;
@@ -30,6 +31,7 @@ const Form = ({
   const { data: user } = useGetUser(token);
 
   const [conflictOpen, setConflictOpen] = useState(false);
+  const [profileIncompleteOpen, setProfileIncompleteOpen] = useState(false);
   const [conflictMessage, setConflictMessage] = useState({
     message: "",
     schedule: "",
@@ -45,7 +47,7 @@ const Form = ({
     }
 
     if (user && !user.profileComplete) {
-      openProfile();
+      setProfileIncompleteOpen(true);
       return;
     }
 
@@ -70,7 +72,7 @@ const Form = ({
 
       onEnrollmentSuccess?.();
     } catch (error: any) {
-      console.log(error);
+      throw new Error(error.message);
     }
   };
 
@@ -87,7 +89,7 @@ const Form = ({
       setConflictOpen(false);
       onEnrollmentSuccess?.();
     } catch (error: any) {
-      console.log(error.message);
+      throw new Error(error.message);
     }
   };
 
@@ -134,15 +136,6 @@ const Form = ({
         />
       )}
 
-      {!user?.profileComplete && (
-        <AuthWarningCard
-          title="Complete Your Profile"
-          description="You need to fill in your profile details before enrolling in this course."
-          btnLabel="Complete"
-          onAction={openProfile}
-        />
-      )}
-
       <ConflictModal
         open={conflictOpen}
         onOpenChange={setConflictOpen}
@@ -150,6 +143,12 @@ const Form = ({
         schedule={conflictMessage.schedule}
         onProceed={handleConflictProceed}
         isPending={mutation.isPending}
+      />
+
+      <ProfileIncompleteModal
+        open={profileIncompleteOpen}
+        onOpenChange={setProfileIncompleteOpen}
+        onCompleteProfile={openProfile}
       />
     </>
   );

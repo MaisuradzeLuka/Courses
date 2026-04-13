@@ -9,13 +9,16 @@ import {
   usePostCompleteCourse,
   usePostRetakeCourse,
 } from "@/features/coursesInProgress/api";
+import { usePostRateCourse } from "../../api";
+import { useState } from "react";
+import CourseRatingStars from "./CourseRatingStars";
+
 type Props = {
   enrollment: EnrollmentType;
   isRated: boolean;
   token: string;
   courseId: number;
   onCourseCompleted?: () => void;
-  onRequestCompletionModal?: () => void;
 };
 
 const EnrolledData = ({
@@ -24,24 +27,25 @@ const EnrolledData = ({
   token,
   courseId,
   onCourseCompleted,
-  onRequestCompletionModal,
 }: Props) => {
   const deleteEnrollement = usePostRetakeCourse();
   const completeCourse = usePostCompleteCourse();
+  const rateMutation = usePostRateCourse();
+  const [rating, setRating] = useState(0);
+  const [ratingHover, setRatingHover] = useState(0);
 
   const isCompleted = enrollment.progress === 100;
 
   const handleClick = async () => {
     try {
-      let res;
       if (isCompleted) {
-        res = await deleteEnrollement.mutateAsync(enrollment.id);
+        await deleteEnrollement.mutateAsync(enrollment.id);
       } else {
-        res = await completeCourse.mutateAsync(enrollment.id);
+        await completeCourse.mutateAsync(enrollment.id);
         onCourseCompleted?.();
       }
     } catch (error: any) {
-      console.log(error.message);
+      throw new Error(error.message);
     }
   };
 
@@ -96,14 +100,36 @@ const EnrolledData = ({
         {isCompleted ? "Retake Course" : "Complete Course"}
       </Button>
 
-      {isCompleted && !isRated && (
-        <button
-          type="button"
-          onClick={() => onRequestCompletionModal?.()}
-          className="body-s mt-6 w-full rounded-lg border-2 border-brand-300 py-4 font-medium text-brand-500 transition hover:bg-brand-50"
-        >
-          Rate your experience
-        </button>
+      {isCompleted && (
+        <div className="flex flex-col gap-3 bg-gray-50 p-10 rounded-xl border border-gray-100 mt-2 mb-3">
+          {!isRated ? (
+            <>
+              <p className="body-s text-center text-gray-600">
+                Rate your experience
+              </p>
+              <CourseRatingStars
+                value={rating}
+                hover={ratingHover}
+                onHover={setRatingHover}
+                disabled={rateMutation.isPending}
+                onSelect={async (value) => {
+                  setRating(value);
+                  await rateMutation.mutateAsync({
+                    token,
+                    courseId,
+                    rating: value,
+                  });
+                  setRating(0);
+                  setRatingHover(0);
+                }}
+              />
+            </>
+          ) : (
+            <p className="body-s text-center text-gray-600">
+              You have already rated this course. Thank you!
+            </p>
+          )}
+        </div>
       )}
     </section>
   );

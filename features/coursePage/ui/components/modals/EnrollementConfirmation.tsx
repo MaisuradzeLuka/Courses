@@ -24,7 +24,7 @@ const EnrollementConfirmation = ({
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
       <DialogContent
-        className="sm:max-w-md border-gray-200 bg-gray-50 p-8"
+        className="sm:max-w-md border-gray-200 bg-gray-50 p-12"
         showCloseButton
       >
         <DialogHeader className="flex flex-col items-center">

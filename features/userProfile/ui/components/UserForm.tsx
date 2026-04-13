@@ -6,12 +6,13 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Controller, useForm } from "react-hook-form";
 import { updateProfile } from "../../api";
-import { UpdateProfileData } from "@/lib/validations";
+import { UpdateProfileData, updateProfileSchema } from "@/lib/validations";
 import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import { useQueryClient } from "@tanstack/react-query";
 import UploadImage from "@/components/shared/UploadImage";
 import AgeSelector from "./AgeSelector";
+import { zodResolver } from "@hookform/resolvers/zod";
 
 type Props = {
   fullname: string | null;
@@ -35,6 +36,8 @@ const UserForm = ({
   const [formError, setFormError] = useState("");
 
   const form = useForm<UpdateProfileData>({
+    resolver: zodResolver(updateProfileSchema),
+    mode: "onBlur",
     defaultValues: {
       fullname: "",
       email: "",

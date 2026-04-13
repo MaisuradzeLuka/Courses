@@ -33,7 +33,6 @@ const CoursePage = ({ id }: { id: string }) => {
             courseId={course.data.id}
             token={token}
             onCourseCompleted={() => setCourseCompletionOpen(true)}
-            onRequestCompletionModal={() => setCourseCompletionOpen(true)}
           />
         ) : (
           <EnrollmentData
