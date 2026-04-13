@@ -86,8 +86,15 @@ const SignUp = () => {
     }
   };
 
+  const handleOpenChange = (open: boolean) => {
+    setShowSignUp(open);
+    if (!open) {
+      form.reset();
+    }
+  };
+
   return (
-    <Dialog open={signUpOpen} onOpenChange={setShowSignUp}>
+    <Dialog open={signUpOpen} onOpenChange={handleOpenChange}>
       <DialogTrigger className="border-2 rounded-lg py-4 px-6 border-brand-500 bg-brand-500 text-gray-50 font-semibold text-xl cursor-pointer">
         Sign Up
       </DialogTrigger>

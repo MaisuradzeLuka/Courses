@@ -17,7 +17,7 @@ type Props = {
 const AgeSelector = ({ value, onChange }: Props) => {
   return (
     <div className="flex flex-col gap-2">
-      <Label className="body-xs text-gray-700">Age</Label>
+      <Label className="body-xs text-gray-700 mb-1">Age</Label>
 
       <Select
         value={value ? String(value) : undefined}

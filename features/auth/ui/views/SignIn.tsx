@@ -61,8 +61,15 @@ const SignIn = ({ styles }: { styles?: string }) => {
     }
   };
 
+  const handleOpenChange = (open: boolean) => {
+    setShowSignIn(open);
+    if (!open) {
+      form.reset();
+    }
+  };
+
   return (
-    <Dialog open={signInOpen} onOpenChange={setShowSignIn}>
+    <Dialog open={signInOpen} onOpenChange={handleOpenChange}>
       <DialogTrigger
         className={`border-2 rounded-lg py-4 px-6 border-brand-300 text-brand-500 font-semibold text-xl cursor-pointer  ${styles}`}
       >

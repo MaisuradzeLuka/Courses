@@ -35,7 +35,6 @@ const AuthModalContext = createContext<AuthModalContextType | undefined>(
 );
 
 export function AuthModalProvider({ children }: { children: ReactNode }) {
-  const queryClient = useQueryClient();
   const [token, setTokenState] = useState("");
   const [signInOpen, setSignInOpen] = useState(false);
   const [signUpOpen, setSignUpOpen] = useState(false);

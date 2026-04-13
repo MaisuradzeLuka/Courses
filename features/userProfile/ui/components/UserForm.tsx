@@ -62,6 +62,7 @@ const UserForm = ({
       const { data } = await mutation.mutateAsync(values);
       queryClient.setQueryData(["me"], data);
       setShowProfile(false);
+      form.reset();
     } catch (error: any) {
       setFormError(error.message);
     }
@@ -93,7 +94,7 @@ const UserForm = ({
                     ? "border-error focus:border-error text-error"
                     : ""
                 }`}
-                placeholder="you@example.com"
+                placeholder="Username"
                 {...field}
               />
             </Label>
@@ -136,7 +137,7 @@ const UserForm = ({
         )}
       />
 
-      <div className="flex items-center gap-2">
+      <div className="flex  gap-2">
         <Controller
           name="mobile"
           control={form.control}

@@ -5,7 +5,7 @@ export const items = [
     description:
       "Explore a wide range of expert-led courses in design, development, business, and more. Find the skills you need to grow your career and learn at your own pace.",
     btnLabel: "Browse Courses",
-    link: "#",
+    link: "/browse",
     id: "startLearning",
   },
   {
@@ -14,7 +14,7 @@ export const items = [
     description:
       "Your learning journey is already in progress. Continue your enrolled courses, track your progress, and stay on track toward completing your goals.",
     btnLabel: "Start Learning",
-    link: "#",
+    link: "/browse",
     id: "continueLearning",
   },
   {
@@ -22,7 +22,7 @@ export const items = [
     title: "Learn together, grow faster",
     description: "",
     btnLabel: "Learn More",
-    link: "#",
+    link: "/browse",
     id: "learnMore",
   },
 ];
